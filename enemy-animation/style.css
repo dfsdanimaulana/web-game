@@ -1,0 +1,9 @@
+.enemy-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  border: 3px solid black;
+  width: 200px;
+  height: 400px;
+}

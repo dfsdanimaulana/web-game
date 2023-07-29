@@ -1,0 +1,13 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+#canvas1 {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to bottom, red, yellow, blue);
+} 
+#collisionCanvas {
+  opacity: 0;
+}

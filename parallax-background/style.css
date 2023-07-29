@@ -1,0 +1,24 @@
+body {
+  background: black;
+}
+.container {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  position: absolute;
+  border: 1px solid white;
+}
+
+.parallax-background {
+  position: relative;
+  width: 800px;
+  height: 700px;
+}
+
+input {
+  width: 100%;
+}
+
+p {
+  color: white;
+}
