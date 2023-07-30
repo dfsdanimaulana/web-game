@@ -7,9 +7,9 @@ class SpriteAnimator {
   * @param {string} spriteSheetSrc - The source URL of the sprite sheet image.
   * @param {Array} animationStates - An array of animation states with their corresponding frame counts.
   */
-  constructor(canvasId, spriteWidth, spriteHeight, spriteSheetSrc, animationStates) {
+  constructor(canvas, spriteWidth, spriteHeight, spriteSheetSrc, animationStates) {
     // Get the canvas element with the specified ID
-    this.canvas = document.getElementById(canvasId);
+    this.canvas = canvas;
 
     // Get the 2D rendering context of the canvas
     this.ctx = this.canvas.getContext('2d');
