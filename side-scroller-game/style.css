@@ -18,15 +18,17 @@ body {
   max-height: 100%;
 }
 
-#playerImage,
-#backgroundImage,
-#enemyImage {
+img {
   display: none;
 }
 
-#toggleFullscreenButton {
+button {
+  padding: 3px 5px;
+  border-radius: 5px;
+}
+
+.btn {
   position: absolute;
-  top: 10px;
   left: 50%;
   transform: translate(-50%);
 }
