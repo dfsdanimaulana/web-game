@@ -1,8 +1,5 @@
 export default class Background {
-  constructor(gameWidth,
-    gameHight) {
-    this.gameWidth = gameWidth
-    this.gameHight = gameHight
+  constructor() {
     this.image = backgroundImage
     this.x = 0
     this.y = 0
