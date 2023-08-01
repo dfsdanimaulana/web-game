@@ -20,6 +20,20 @@ export default class Enemy extends Character {
 
 }
 
+  export class GrassMonster extends Enemy {
+    constructor(gameWidth, gameHeight) {
+      super(gameWidth, gameHeight)
+      this.spriteWidth = 271
+      this.spriteHeight = 235
+      this.width = this.spriteWidth*this.scale
+      this.height = this.spriteHeight*this.scale
+      this.x = this.gameWidth
+      this.y = this.gameHeight - this.height
+      this.image = grassMonster
+      this.maxFrameX = 13
+    }
+  }
+
   export class SkeletonBom extends Enemy {
     constructor(gameWidth, gameHeight) {
       super(gameWidth, gameHeight)
@@ -54,7 +68,7 @@ export default class Enemy extends Character {
     }
     update(deltaTime) {
       super.update(deltaTime)
-      
+
       this.y += this.curve * Math.sin(this.angle)
       this.angle += this.angleSpeed
       if (this.x < (0 - this.width)) {
@@ -81,7 +95,7 @@ export default class Enemy extends Character {
     }
     update(deltaTime) {
       super.update(deltaTime)
-      
+
       this.y += this.curve * Math.sin(this.angle)
       this.angle += this.angleSpeed
       if (this.x < (0 - this.width)) {
@@ -109,7 +123,7 @@ export default class Enemy extends Character {
     }
     update(deltaTime) {
       super.update(deltaTime)
-      
+
       this.y += this.curve * Math.sin(this.angle)
       if (this.y < 0 - this.width)
         this.angle += this.angleSpeed

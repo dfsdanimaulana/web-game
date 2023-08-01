@@ -75,4 +75,22 @@ export default class Player extends Character {
     this.frameY = 0
     this.collision = false
   }
+  draw(ctx, enemies) {
+
+    function drawLine(x1, y1, x2, y2) {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+    ctx.save()
+    ctx.strokeStyle = 'blue'
+    if (this.stroke) {
+      enemies.map(enemy => {
+        drawLine(this.x +this.width/2, this.y+this.height/2, enemy.x +enemy.width/2, enemy.y+enemy.height/2)
+      })
+    }
+    ctx.restore()
+    super.draw(ctx)
+  }
 }

@@ -34,7 +34,7 @@ export default class Character {
   draw(ctx) {
     ctx.drawImage(this.image, this.frameX*this.spriteWidth, this.frameY*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
     if (this.stroke) {
-
+      ctx.save()
       // Set the stroke style and width
       ctx.strokeStyle = 'yellow';
       ctx.lineWidth = 2;
@@ -46,7 +46,8 @@ export default class Character {
       ctx.beginPath();
       ctx.arc(this.x+this.width/2, this.y+this.height/2, radius, 0, 2 * Math.PI);
       ctx.stroke();
-
+      ctx.restore()
+      
       // Rectangle stroke
       ctx.save()
       ctx.strokeStyle = 'white';

@@ -7,7 +7,8 @@ import {
   Bat,
   Bee,
   BlueDragon,
-  SkeletonBom
+  SkeletonBom,
+  GrassMonster
 } from './classes/Enemy.js'
 import Player from './classes/Player.js'
 import Background, {
@@ -18,7 +19,7 @@ import InputHandler from './classes/InputHandler.js'
 window.addEventListener('load', function () {
   const canvas = document.getElementById('canvas1')
   const ctx = canvas.getContext('2d')
-  canvas.width = 1500
+  canvas.width = 1600
   canvas.height = 720
   let enemies = []
   let score = 0
@@ -67,6 +68,9 @@ window.addEventListener('load', function () {
     {
       type: 'skeletonBom', weight: 0
     },
+    {
+      type: 'grassMonster', weight: 3
+    },
   ];
 
   function handleEnemy(deltaTime) {
@@ -107,6 +111,9 @@ window.addEventListener('load', function () {
           break;
         case 'bee':
           enemies.push(new Bee(canvas.width, canvas.height));
+          break;
+        case 'grassMonster':
+          enemies.push(new GrassMonster(canvas.width, canvas.height));
           break;
         default:
           break;
@@ -184,20 +191,54 @@ window.addEventListener('load', function () {
     backgroundLayer1.push(new Layer(imageLayer1[i], gameSpeed, speedModifier + (speedModifier*i)))
   }
 
-  const backgrounds = [backgroundLayer1]
+
+  const backgrounds = [forestBackground,
+    backgroundLayer1]
+
+  function randomBackground () {
+    // Function to get a random index from an array
+    function getRandomIndex(arr) {
+      return Math.floor(Math.random() * arr.length);
+    }
+
+    // Pick a random value from the 'backgrounds' array
+    const randomIndex = getRandomIndex(backgrounds);
+    const randomValue = backgrounds[randomIndex];
+
+    // Check if the value is an array
+    const isValueArray = Array.isArray(randomValue);
+
+    return {
+      randomValue,
+      isValueArray
+    }
+  }
+
+  const {randomValue, isValueArray} = randomBackground()
+
+
   let lastTime = 0
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime
     lastTime = timeStamp
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    forestBackground.draw(ctx)
-    forestBackground.update()
-    backgroundLayer1.map((layer)=> {
-      layer.update(deltaTime)
-      layer.draw(ctx)
-    })
-    player.draw(ctx)
-    player.update(input, deltaTime, enemies)
+    ctx.clearRect(0,
+      0,
+      canvas.width,
+      canvas.height)
+    if (isValueArray) {
+      randomValue.map((layer)=> {
+        layer.update(deltaTime)
+        layer.draw(ctx)
+      })
+    } else {
+      randomValue.draw(ctx)
+      randomValue.update(deltaTime)
+    }
+    player.draw(ctx,
+      enemies)
+    player.update(input,
+      deltaTime,
+      enemies)
     handleEnemy(deltaTime)
     if (player.collision) {
       gameOver = true
@@ -212,6 +253,8 @@ window.addEventListener('load', function () {
       enemies.map(object => object.strokeOff())
     }
     if (!gameOver) requestAnimationFrame(animate)
+
   }
   animate(0)
+
 })
