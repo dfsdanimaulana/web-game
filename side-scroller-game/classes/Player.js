@@ -1,34 +1,23 @@
-export default class Player {
+import Character from './Character.js'
+
+export default class Player extends Character {
   constructor(gameWidth,
-    gameHight) {
-    this.gameWidth = gameWidth
-    this.gameHight = gameHight
+    gameHeight) {
+    super(gameWidth, gameHeight)
     this.spriteWidth = 200
     this.spriteHeight = 200
-    this.width = 200
-    this.height = 200
+    this.scale = 1;
+    this.width = this.spriteWidth * this.scale;
+    this.height = this.spriteHeight * this.scale;
     this.x = 50
-    this.y = this.gameHight - this.height
+    this.y = this.gameHeight - this.height
     this.image = playerImage
-    this.frameX = 0
-    this.maxFrameX = 8
-    this.frameY = 0
-    this.speed = 0
+    this.maxFrameX = 9
     this.vx = 10
     this.vy = 0
     this.weight = 1
-    this.fps = 20
-    this.frameTimer = 0
-    this.frameInterval = 1000 / this.fps
+    this.speed = 0
     this.collision = false
-    this.stroke = false
-
-  }
-  strokeOn() {
-    this.stroke = true
-  }
-  strokeOff() {
-    this.stroke = false
   }
   update(input,
     deltaTime,
@@ -43,14 +32,9 @@ export default class Player {
         this.collision = true
       }
     })
+
     // Sprite Animation
-    if (this.frameTimer > this.frameInterval) {
-      if (this.frameX >= this.maxFrameX) this.frameX = 0
-      else this.frameX++
-      this.frameTimer = 0
-    } else {
-      this.frameTimer += deltaTime
-    }
+    super.update(deltaTime)
 
     // Controls
     if (input.keys.indexOf('ArrowRight') > -1 || input.keys.indexOf('SwipeRight') > -1) {
@@ -78,45 +62,17 @@ export default class Player {
       this.vy = 0
       this.frameY = 0
     }
-    if (this.y > this.gameHight - this.height)
-      this.y = this.gameHight - this.height
+    if (this.y > this.gameHeight - this.height)
+      this.y = this.gameHeight - this.height
   }
   onGround() {
-    return this.y >= this.gameHight - this.height
+    return this.y >= this.gameHeight - this.height
   }
   restart() {
     this.x = 50
-    this.y = this.gameHight - this.height
+    this.y = this.gameHeight - this.height
     this.maxFrameX = 8
     this.frameY = 0
     this.collision = false
-  }
-  draw(ctx) {
-    ctx.drawImage(
-      this.image,
-      this.frameX * this.spriteWidth,
-      this.frameY * this.spriteHeight,
-      this.spriteWidth,
-      this.spriteHeight,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    )
-    if (this.stroke) {
-      // Set the stroke style and width
-      ctx.strokeStyle = 'red';
-      ctx.lineWidth = 2;
-
-      // Calculate the circle's center and radius
-      const radius = this.width/2;
-
-      // Draw the circle stroke
-      ctx.beginPath();
-      ctx.arc(this.x+this.width/2, this.y+this.height/2, radius, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = 'white';
-      ctx.strokeRect(this.x, this.y, this.width, this.height)
-    }
   }
 }

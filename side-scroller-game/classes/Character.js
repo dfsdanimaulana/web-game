@@ -1,18 +1,11 @@
 // Character class
 export default class Character {
-  constructor(gameWidth, gameHeight, spriteWidth, spriteHeight, scale) {
+  constructor(gameWidth, gameHeight) {
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
-    this.spriteWidth = spriteWidth;
-    this.spriteHeight = spriteHeight;
-    this.scale = scale;
-    this.width = this.spriteWidth * this.scale;
-    this.height = this.spriteHeight * this.scale;
-    this.x = 0;
-    this.y = 0;
     this.frameX = 0;
     this.frameY = 0;
-    this.maxFrameX = 0;
+    this.maxFrameX = 60;
     this.fps = 20;
     this.frameTimer = 0;
     this.frameInterval = 1000 / this.fps;
@@ -28,45 +21,40 @@ export default class Character {
   }
 
   update(deltaTime) {
-    // To be implemented by subclasses
-  }
+    // Sprite Animation
+    if (this.frameTimer > this.frameInterval) {
+      if (this.frameX >= (this.maxFrameX - 1)) this.frameX = 0
+      else this.frameX++
+      this.frameTimer = 0
+    } else {
+      this.frameTimer += deltaTime
+    }
 
+  }
   draw(ctx) {
-    // To be implemented by subclasses
-  }
-}
+    ctx.drawImage(this.image, this.frameX*this.spriteWidth, this.frameY*this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
+    if (this.stroke) {
 
-// Player class extending Character
-export class Player extends Character {
-  constructor(gameWidth, gameHeight) {
-    super(gameWidth, gameHeight, 200, 200, 1);
-    this.x = 50;
-    this.y = this.gameHeight - this.height;
-    this.image = playerImage;
-    this.maxFrameX = 8;
-    this.frameY = 0;
-    this.speed = 0;
-    this.vx = 10;
-    this.vy = 0;
-    this.weight = 1;
-    this.collision = false;
-  }
+      // Set the stroke style and width
+      ctx.strokeStyle = 'yellow';
+      ctx.lineWidth = 2;
 
-  // ... (rest of the Player class methods)
-}
+      // Calculate the circle's center and radius
+      const radius = this.width/2;
 
-// Enemy class extending Character
-export class Enemy extends Character {
-  constructor(gameWidth, gameHeight) {
-    super(gameWidth, gameHeight, 0, 0, 0);
-    this.maxFrameX = 6;
-    this.directionX = Math.random() * 5 + 3;
-    this.directionY = Math.random() * 5 - 2.5;
-    this.vx = Math.random() * 0.2 + 0.1;
-    this.collisionWidth = this.width;
-    this.collisionHeight = this.height;
-    this.markedForDeletion = false;
+      // Draw the circle stroke
+      ctx.beginPath();
+      ctx.arc(this.x+this.width/2, this.y+this.height/2, radius, 0, 2 * Math.PI);
+      ctx.stroke();
+
+      // Rectangle stroke
+      ctx.save()
+      ctx.strokeStyle = 'white';
+      ctx.setLineDash([5, 5]); // Alternating 5-pixel dashes and 5-pixel gaps
+      ctx.strokeRect(this.x, this.y, this.width, this.height)
+      ctx.restore()
+
+    }
   }
 
-  // ... (rest of the Enemy class methods)
 }

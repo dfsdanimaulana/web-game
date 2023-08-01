@@ -53,16 +53,16 @@ window.addEventListener('load', function () {
       type: 'spider', weight: 3
     },
     {
-      type: 'raven', weight: 1
+      type: 'raven', weight: 3
     },
     {
-      type: 'bat', weight: 2
+      type: 'bat', weight: 3
     },
     {
-      type: 'bee', weight: 2
+      type: 'bee', weight: 3
     },
     {
-      type: 'blueDragon', weight: 1
+      type: 'blueDragon', weight: 3
     },
     {
       type: 'skeletonBom', weight: 0
@@ -183,24 +183,6 @@ window.addEventListener('load', function () {
     let speedModifier = 0.2
     backgroundLayer1.push(new Layer(imageLayer1[i], gameSpeed, speedModifier + (speedModifier*i)))
   }
-
-
-  // const layer1 = new Layer(bgLayer1, gameSpeed, 0.2)
-  // const layer2 = new Layer(bgLayer2, gameSpeed, 0.4)
-  // const layer3 = new Layer(bgLayer3, gameSpeed, 0.6)
-  // const layer4 = new Layer(bgLayer4, gameSpeed, 0.8)
-  // const layer5 = new Layer(bgLayer5, gameSpeed, 1)
-  // const layer6 = new Layer(bgLayer6, gameSpeed, 1.2)
-
-  // const City2 = [
-  //   layer1,
-  //   layer2,
-  //   layer3,
-  //   layer4,
-  //   layer5,
-  //   layer6
-  // ]
-
 
   const backgrounds = [backgroundLayer1]
   let lastTime = 0
