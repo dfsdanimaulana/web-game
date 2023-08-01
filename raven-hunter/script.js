@@ -10,11 +10,13 @@ collisionCanvas.height = window.innerHeight
 ctx.font = '20px impact'
 
 let score = 0
+let bestScore = 0
 let gameOver = false
+let life = 5
 
 let lastTime = 0
 let timeToNextRaven = 0
-let ravenInterval = 500
+let ravenInterval = 1000
 
 let ravens = []
 class Raven {
@@ -35,13 +37,13 @@ class Raven {
     this.maxFrame = 4
     this.timeSinceFlap = 0
     this.flapInterval = Math.random()*50 + 50
-    this.hasTrail = Math.random() > 0.5
     this.randomColor = [
       Math.floor(Math.random()*255),
       Math.floor(Math.random()*255),
       Math.floor(Math.random()*255)
     ]
     this.color = `rgb(${this.randomColor[0]},${this.randomColor[1]},${this.randomColor[2]})`
+    console.log(ravens)
   }
 
 
@@ -49,13 +51,14 @@ class Raven {
     if (this.y < 0 || this.y > canvas.height - this.height) {
       this.directionY = this.directionY*-1
     }
+
     this.x -= this.directionX
     this.y += this.directionY
+
     if (this.x < (0 - this.width)) {
       this.markedForDeletion = true
     }
     this.timeSinceFlap += deltatime
-
     if (this.timeSinceFlap > this.flapInterval) {
       if (this.frame > this.maxFrame) {
         this.frame = 0
@@ -63,20 +66,15 @@ class Raven {
         this.frame++
       }
       this.timeSinceFlap = 0
-      if (this.hasTrail) {
-        for (let i = 0; i < 5; i++) {
-          particles.push(new Particle(this.x, this.y, this.width, this.color))
-        }
-      }
     }
-    // if (this.x < 0 - this.width) gameOver = true
+    if (this.x < 0 - this.width) life -= 1
 
   }
 
   draw() {
     collisionCtx.fillStyle = this.color
     collisionCtx.fillRect(this.x, this.y, this.width, this.height)
-    ctx.drawImage(this.image, this.frame*this.spriteWidth, 0, this.spriteWidth, this.spriteHight, this.x, this.y, this.width, this .height)
+    ctx.drawImage(this.image, this.frame*this.spriteWidth, 0, this.spriteWidth, this.spriteHight, this.x, this.y, this.width, this.height)
   }
 }
 
@@ -113,37 +111,6 @@ class Explosion {
   }
 }
 
-let particles = []
-class Particle {
-  constructor(x, y, size, color) {
-    this.size = size
-    this.x = x + this.size/2 + Math.random()*50-25
-    this.y = y + this.size/3
-    this.color = color
-    this.radius = Math.random()*this.size/10
-    this.maxRadius = Math.random()*20 + 35
-    this.markedForDeletion = false
-    this.speedX = Math.random()*1 + 0.5
-  }
-
-  update() {
-    this.x += this.speedX
-    this.radius += 0.3
-    if (this.radius > this.maxRadius) {
-      this.markedForDeletion = true
-    }
-  }
-  draw() {
-    ctx.save()
-    ctx.globalAlpha = 1 - this.radius/this.maxRadius
-    ctx.beginPath()
-    ctx.fillStyle = this.color
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2)
-    ctx.fill()
-    ctx.restore()
-  }
-}
-
 // detect collision
 window.addEventListener('click', (e)=> {
   const detectPixelColor = collisionCtx.getImageData(e.x, e.y, 1, 1)
@@ -162,11 +129,34 @@ window.addEventListener('click', (e)=> {
   })
 })
 
+function checkLocalStorage() {
+  if (!localStorage.getItem('ravenBestScore')) {
+    localStorage.setItem('ravenBestScore', '0')
+  }
+}
+
+function updateBestScore(newScore) {
+  const currentBestScore = parseInt(localStorage.getItem('ravenBestScore'))
+  if (newScore > currentBestScore) {
+    localStorage.setItem('ravenBestScore', newScore.toString())
+  }
+}
+
 function drawScore () {
   ctx.fillStyle = 'black'
   ctx.fillText('Score '+score, 5, 20)
   ctx.fillStyle = 'white'
   ctx.fillText('Score '+score, 7, 22)
+
+  ctx.fillStyle = 'black'
+  ctx.fillText('Best Score '+bestScore, 5, 50)
+  ctx.fillStyle = 'white'
+  ctx.fillText('Best Score '+bestScore, 7, 52)
+
+  ctx.fillStyle = 'black'
+  ctx.fillText('Life '+life, 5, 80)
+  ctx.fillStyle = 'white'
+  ctx.fillText('Life '+life, 7, 82)
 }
 
 function drawGameOver () {
@@ -182,6 +172,8 @@ function drawGameOver () {
 }
 
 function animate (timestamp) {
+  if (life <= 0) gameOver = true
+
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   collisionCtx.clearRect(0, 0, canvas.width, canvas.height)
   let deltatime = timestamp - lastTime
@@ -192,29 +184,27 @@ function animate (timestamp) {
     timeToNextRaven = 0
     ravens.sort((a, b)=> a.width - b.width)
   }
-
-  const updateArray = [...particles,
+  bestScore = localStorage.getItem('ravenBestScore')
+  checkLocalStorage()
+  updateBestScore(score)
+  const updateArray = [
     ...ravens,
     ...explosions]
   updateArray.forEach(object => object.update(deltatime))
 
-  const drawArray = [...particles,
+  const drawArray = [
     ...ravens,
     ...explosions]
   drawArray.forEach(object => object.draw())
 
 
-  const newParticles = particles.filter(object => !object.markedForDeletion)
-  const newRavens = ravens.filter(object => !object.markedForDeletion)
-  const newExplosions = explosions.filter(object => !object.markedForDeletion)
 
-  particles = newParticles
-  ravens = newRavens
-  explosions = newExplosions
+
+  ravens = ravens.filter(object => !object.markedForDeletion)
+  explosions = explosions.filter(object => !object.markedForDeletion)
 
   drawScore()
-  // if (!gameOver) requestAnimationFrame(animate)
-  // else drawGameOver()
-  requestAnimationFrame(animate)
+  if (!gameOver) requestAnimationFrame(animate)
+  else drawGameOver()
 }
 animate(0)
