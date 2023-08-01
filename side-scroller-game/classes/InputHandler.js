@@ -56,7 +56,6 @@ export default class InputHandler {
         this.keys.splice(this.keys.indexOf('SwipeDown'), 1);
         this.keys.splice(this.keys.indexOf('SwipeLeft'), 1); // Remove SwipeLeft from keys array
         this.keys.splice(this.keys.indexOf('SwipeRight'), 1); // Remove SwipeRight from keys array
-        this.keys.splice(this.keys.indexOf('Enter'), 1); // Remove SwipeRight from keys array
       })
 
   }

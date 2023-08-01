@@ -25,10 +25,26 @@ img {
 button {
   padding: 3px 5px;
   border-radius: 5px;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  background-color: rgba(0,0,0,0.5);
+  padding: 2px 4px;
 }
 
-.btn {
+.buttons {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  top: 10px;
+  left: 10px;
+}
+
+#restartGameButton {
+  display: none;
   position: absolute;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%);
+  transform: translate(-50%,-50%);
 }

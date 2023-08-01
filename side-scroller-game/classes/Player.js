@@ -21,13 +21,21 @@ export default class Player {
     this.frameTimer = 0
     this.frameInterval = 1000 / this.fps
     this.collision = false
+    this.stroke = false
+
+  }
+  strokeOn() {
+    this.stroke = true
+  }
+  strokeOff() {
+    this.stroke = false
   }
   update(input,
     deltaTime,
     enemies) {
     // Collision Detection
     enemies.map((enemy) => {
-      const dx = (enemy.x + enemy.width / 2 -20) - (this.x + this.width / 2)
+      const dx = (enemy.x + enemy.width / 2 - 20) - (this.x + this.width / 2)
       const dy =
       enemy.y + enemy.height / 2 - (this.y + this.width / 2 + 20)
       const distance = Math.sqrt(dx * dx + dy * dy)
@@ -83,8 +91,8 @@ export default class Player {
     this.frameY = 0
     this.collision = false
   }
-  draw(context) {
-    context.drawImage(
+  draw(ctx) {
+    ctx.drawImage(
       this.image,
       this.frameX * this.spriteWidth,
       this.frameY * this.spriteHeight,
@@ -95,5 +103,20 @@ export default class Player {
       this.width,
       this.height
     )
+    if (this.stroke) {
+      // Set the stroke style and width
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 2;
+
+      // Calculate the circle's center and radius
+      const radius = this.width/2;
+
+      // Draw the circle stroke
+      ctx.beginPath();
+      ctx.arc(this.x+this.width/2, this.y+this.height/2, radius, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.strokeStyle = 'white';
+      ctx.strokeRect(this.x, this.y, this.width, this.height)
+    }
   }
 }
