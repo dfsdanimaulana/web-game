@@ -31,8 +31,15 @@ img {
     display: none;
 }
 
+#toggleFullscreenButton img {
+    display: block !important;
+    width: 20px;
+    height: auto;
+}
+
 .buttons {
     position: fixed;
+    display: flex;
     top: 10px;
     left: 10px;
 }
@@ -65,7 +72,11 @@ button {
         color: white;
         background-color: rgba(0, 0, 0, 0.5);
     }
-
+    #toggleFullscreenButton img {
+        display: block !important;
+        width: 30px;
+        height: auto;
+    }
     #restartGameButton {
         padding: 10px 20px;
         font-size: 2.5rem;
