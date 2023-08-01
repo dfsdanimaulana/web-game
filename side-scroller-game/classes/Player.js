@@ -48,9 +48,11 @@ export default class Player extends Character {
     }
     // Horizontal movement
     this.x += this.speed
-    if (this.x < 0) this.x = 0
-    else if (this.x > this.gameWidth - this.width)
+    if (this.x < 0) {
+      this.x = 0
+    } else if (this.x > this.gameWidth - this.width) {
       this.x = this.gameWidth - this.width
+    }
     // Vertical movement
     this.y += this.vy
     if (!this.onGround()) {
@@ -62,8 +64,9 @@ export default class Player extends Character {
       this.vy = 0
       this.frameY = 0
     }
-    if (this.y > this.gameHeight - this.height)
+    if (this.y > this.gameHeight - this.height) {
       this.y = this.gameHeight - this.height
+    }
   }
   onGround() {
     return this.y >= this.gameHeight - this.height
@@ -94,3 +97,42 @@ export default class Player extends Character {
     super.draw(ctx)
   }
 }
+
+  export class ShadowDog extends Player {
+    constructor(gameWidth, gameHeight) {
+      super(gameWidth, gameHeight)
+      this.spriteWidth = 573
+      this.spriteHeight = 523
+      this.scale = 0.5;
+      this.width = this.spriteWidth * this.scale;
+      this.height = this.spriteHeight * this.scale;
+      this.frameY = 3
+      this.maxFrameX = 9
+      this.image = shadowDog
+    }
+    update(input, deltaTime, enemies) {
+      super.update(input, deltaTime, enemies)
+      // Vertical movement
+      this.y += this.vy
+      if (!this.onGround()) {
+        // jump
+        this.vy += this.weight
+        this.frameY = 1
+        this.maxFrameX = 7
+      } else {
+        if (this.vy > 0) {
+          // falling
+          this.frameY = 2
+          this.maxFrameX = 7
+        } else {
+          // run
+          this.maxFrameX = 9
+          this.vy = 0
+          this.frameY = 3
+        }
+      }
+      if (this.y > this.gameHeight - this.height) {
+        this.y = this.gameHeight - this.height
+      }
+    }
+  }

@@ -10,11 +10,16 @@ import {
   SkeletonBom,
   GrassMonster
 } from './classes/Enemy.js'
-import Player from './classes/Player.js'
+import Player, {
+  ShadowDog
+} from './classes/Player.js'
 import Background, {
   Layer
 } from './classes/Background.js'
 import InputHandler from './classes/InputHandler.js'
+import {
+  toggleFullscreen
+} from './utils.js'
 
 window.addEventListener('load', function () {
   const canvas = document.getElementById('canvas1')
@@ -23,6 +28,7 @@ window.addEventListener('load', function () {
   canvas.height = 720
   let enemies = []
   let score = 0
+  let bestScore = 0
   let gameOver = false
   let gameSpeed = 10
   let enemyTimer = 0
@@ -32,6 +38,7 @@ window.addEventListener('load', function () {
 
   const input = new InputHandler()
   const player = new Player(canvas.width, canvas.height)
+  const player2 = new ShadowDog(canvas.width, canvas.height)
   const forestBackground = new Background(canvas.width, canvas.height)
 
   function restartGame() {
@@ -135,24 +142,28 @@ window.addEventListener('load', function () {
     enemies = enemies.filter((enemy) => !enemy.markedForDeletion);
   }
 
-
-  function toggleFullscreen () {
-    if (!document.fullscreenElement) {
-      canvas.requestFullscreen().catch((err)=> {
-        alert(`Error, can't enable full screen mode: ${err.message}`)
-      })
-    } else {
-      document.exitFullscreen()
-    }
-  }
-
   function toggleStroke() {
     strokeOn = !strokeOn
   }
 
-  toggleFullscreenButton.addEventListener('click', toggleFullscreen)
+  toggleFullscreenButton.addEventListener('click', ()=> toggleFullscreen(canvas))
   restartGameButton.addEventListener('click', restartGame)
   toggleStrokeButton.addEventListener('click', toggleStroke)
+
+  function checkLocalStorage() {
+    if (!localStorage.getItem('bestScore')) {
+      localStorage.setItem('bestScore', '0');
+    }
+  }
+
+  function updateBestScore(newScore) {
+    const currentBestScore = parseInt(localStorage.getItem('bestScore'));
+    if (newScore > currentBestScore) {
+      localStorage.setItem('bestScore', newScore.toString());
+    }
+  }
+
+
 
   function displayStatusText(context) {
     context.textAlign = 'left'
@@ -161,6 +172,13 @@ window.addEventListener('load', function () {
     context.fillText('Score: ' + score, 20, 50)
     context.fillStyle = 'white'
     context.fillText('Score: ' + score, 17, 47)
+
+    context.textAlign = 'left'
+    context.font = '40px Helvetica'
+    context.fillStyle = 'black'
+    context.fillText('Best Score: ' + bestScore, 20, 95)
+    context.fillStyle = 'white'
+    context.fillText('Best Score: ' + bestScore, 17, 92)
 
     if (gameOver) {
       context.textAlign = 'center'
@@ -214,7 +232,10 @@ window.addEventListener('load', function () {
     }
   }
 
-  const {randomValue, isValueArray} = randomBackground()
+  const {
+    randomValue,
+    isValueArray
+  } = randomBackground()
 
 
   let lastTime = 0
@@ -240,6 +261,9 @@ window.addEventListener('load', function () {
       deltaTime,
       enemies)
     handleEnemy(deltaTime)
+    bestScore = localStorage.getItem('bestScore')
+    checkLocalStorage()
+    updateBestScore(score)
     if (player.collision) {
       gameOver = true
       restartGameButton.style.display = 'block'
