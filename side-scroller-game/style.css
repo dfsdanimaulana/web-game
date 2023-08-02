@@ -1,84 +1,93 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: black;
+  background-color: black;
+  color: white;
 }
 
 #loading {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-    color: white;
-    font-size: 3rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  color: white;
+  font-size: 3rem;
 }
 #canvas1 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 3px solid white;
-    max-width: 100%;
-    max-height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid white;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 img {
-    display: none;
+  display: none;
 }
 
 #toggleFullscreenButton img {
-    display: block !important;
-    width: 20px;
-    height: auto;
+  display: block !important;
+  width: 20px;
+  height: auto;
 }
 
 .buttons {
-    position: fixed;
-    display: flex;
-    top: 10px;
-    left: 10px;
+  position: fixed;
+  display: flex;
+  top: 10px;
+  left: 10px;
 }
 
 button {
-    cursor: pointer;
-    padding: 3px 5px;
-    border-radius: 5px;
-    border: 2px solid white;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5);
-    margin-right: 10px;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 5px;
+  border: 2px solid white;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-right: 10px;
 }
 
 #restartGameButton {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#enemyStatus {
+  display: block;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-size: 12px;
 }
 
 /* CSS for desktop devices with a minimum width of 1024px */
 @media (min-width: 1024px) {
-    button {
-        padding: 5px 10px;
-        font-size: 2rem;
-        border-radius: 8px;
-        border: 3px solid white;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-    #toggleFullscreenButton img {
-        display: block !important;
-        width: 30px;
-        height: auto;
-    }
-    #restartGameButton {
-        padding: 10px 20px;
-        font-size: 2.5rem;
-    }
+  button {
+    padding: 5px 10px;
+    font-size: 2rem;
+    border-radius: 8px;
+    border: 3px solid white;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  #toggleFullscreenButton img {
+    display: block !important;
+    width: 30px;
+    height: auto;
+  }
+  #restartGameButton {
+    padding: 10px 20px;
+    font-size: 2.5rem;
+  }
 }

@@ -1,4 +1,4 @@
-// classes/Background.js
+
 import Background, { Layer } from '../classes/Background.js'
 
 const generateBackgroundLayer = (imageLayer, gameSpeed) => {
