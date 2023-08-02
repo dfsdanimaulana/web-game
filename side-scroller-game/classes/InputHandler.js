@@ -2,6 +2,7 @@ export default class InputHandler {
   constructor() {
     this.keys = []
     this.touchY = ''
+    this.touchX = ''
     this.touchTresHold = 30
     window.addEventListener('keydown', (e) => {
       if (

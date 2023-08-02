@@ -1,6 +1,10 @@
 export default class InputHandler {
     constructor() {
         this.lastKey = ''
+        this.keys = []
+        this.touchY = ''
+        this.touchX = ''
+        this.touchTresHold = 30
         window.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'ArrowLeft':
@@ -49,6 +53,49 @@ export default class InputHandler {
                 default:
                     break
             }
+        })
+
+        window.addEventListener('touchstart', (e) => {
+            // initial touch position
+            this.touchY = e.changedTouches[0].pageY
+            this.touchX = e.changedTouches[0].pageX
+        })
+
+        window.addEventListener('touchmove', (e) => {
+            // Calculate swipe distance on X-axis and Y-axis
+            const swipeDistanceY = e.changedTouches[0].pageY - this.touchY
+            const swipeDistanceX = e.changedTouches[0].pageX - this.touchX
+
+            if (
+                swipeDistanceY < -this.touchTresHold &&
+                this.keys.indexOf('SwipeUp') === -1
+            ) {
+                this.keys.push('SwipeUp')
+            } else if (
+                swipeDistanceY > this.touchTresHold &&
+                this.keys.indexOf('SwipeDown') === -1
+            ) {
+                this.keys.push('SwipeDown')
+            }
+            if (
+                swipeDistanceX < -this.touchTresHold &&
+                this.keys.indexOf('SwipeLeft') === -1
+            ) {
+                this.keys.push('SwipeLeft') // Add SwipeLeft to keys array
+            } else if (
+                swipeDistanceX > this.touchTresHold &&
+                this.keys.indexOf('SwipeRight') === -1
+            ) {
+                this.keys.push('SwipeRight') // Add SwipeRight to keys array
+            }
+        })
+
+        window.addEventListener('touchend', (e) => {
+            console.log(this.keys)
+            this.keys.splice(this.keys.indexOf('SwipeUp'), 1)
+            this.keys.splice(this.keys.indexOf('SwipeDown'), 1)
+            this.keys.splice(this.keys.indexOf('SwipeLeft'), 1) // Remove SwipeLeft from keys array
+            this.keys.splice(this.keys.indexOf('SwipeRight'), 1) // Remove SwipeRight from keys array
         })
     }
 }
