@@ -1,18 +1,15 @@
 /** @type {HTMLCanvasElement} */
 import {
-    Worm,
-    Spider,
-    Ghost,
-    Raven,
-    Bat,
-    Bee,
-    BlueDragon,
     SkeletonBom,
-    GrassMonster
-} from './classes/Enemy.js'
-import Player, { ShadowDog } from './classes/Player.js'
+    GrassMonster,
+    Worm,
+    PlantEnemy
+} from './enemies/GroundEnemy.js'
+import { Ghost, Raven, Bat, Bee, BlueDragon } from './enemies/FlyingEnemy.js'
+import { Spider, BigSpider } from './enemies/ClimbEnemy.js'
+import Player from './classes/Player.js'
 import InputHandler from './classes/InputHandler.js'
-import { toggleFullscreen } from './utils.js'
+import { randomBackground, toggleFullscreen } from './utils.js'
 import createParallaxBackground from './function/createParallaxBackground.js'
 
 window.addEventListener('load', function () {
@@ -33,7 +30,6 @@ window.addEventListener('load', function () {
 
     const input = new InputHandler()
     const player = new Player(canvas.width, canvas.height)
-    const player2 = new ShadowDog(canvas.width, canvas.height)
     const backgrounds = createParallaxBackground(gameSpeed)
 
     function restartGame() {
@@ -48,10 +44,14 @@ window.addEventListener('load', function () {
     const enemiesData = [
         {
             type: 'ghost',
-            weight: 3
+            weight: 1
         },
         {
             type: 'worm',
+            weight: 3
+        },
+        {
+            type: 'plant',
             weight: 3
         },
         {
@@ -59,8 +59,12 @@ window.addEventListener('load', function () {
             weight: 3
         },
         {
-            type: 'raven',
+            type: 'bigSpider',
             weight: 3
+        },
+        {
+            type: 'raven',
+            weight: 5
         },
         {
             type: 'bat',
@@ -68,11 +72,11 @@ window.addEventListener('load', function () {
         },
         {
             type: 'bee',
-            weight: 3
+            weight: 1
         },
         {
             type: 'blueDragon',
-            weight: 3
+            weight: 1
         },
         {
             type: 'skeletonBom',
@@ -108,8 +112,14 @@ window.addEventListener('load', function () {
                 case 'worm':
                     enemies.push(new Worm(canvas.width, canvas.height))
                     break
+                case 'plant':
+                    enemies.push(new PlantEnemy(canvas.width, canvas.height))
+                    break
                 case 'spider':
                     enemies.push(new Spider(canvas.width, canvas.height))
+                    break
+                case 'bigSpider':
+                    enemies.push(new BigSpider(canvas.width, canvas.height))
                     break
                 case 'skeletonBom':
                     enemies.push(new SkeletonBom(canvas.width, canvas.height))
@@ -153,12 +163,6 @@ window.addEventListener('load', function () {
         strokeOn = !strokeOn
     }
 
-    toggleFullscreenButton.addEventListener('click', () =>
-        toggleFullscreen(canvas)
-    )
-    restartGameButton.addEventListener('click', restartGame)
-    toggleStrokeButton.addEventListener('click', toggleStroke)
-
     function checkLocalStorage() {
         if (!localStorage.getItem('bestScore')) {
             localStorage.setItem('bestScore', '0')
@@ -196,26 +200,9 @@ window.addEventListener('load', function () {
         }
     }
 
-    function randomBackground() {
-        // Function to get a random index from an array
-        function getRandomIndex(arr) {
-            return Math.floor(Math.random() * arr.length)
-        }
+    
 
-        // Pick a random value from the 'backgrounds' array
-        const randomIndex = getRandomIndex(backgrounds)
-        const randomValue = backgrounds[randomIndex]
-
-        // Check if the value is an array
-        const isValueArray = Array.isArray(randomValue)
-
-        return {
-            randomValue,
-            isValueArray
-        }
-    }
-
-    const { randomValue, isValueArray } = randomBackground()
+    const { randomValue, isValueArray } = randomBackground(backgrounds)
 
     let lastTime = 0
     function animate(timeStamp) {
@@ -237,10 +224,10 @@ window.addEventListener('load', function () {
         bestScore = localStorage.getItem('bestScore')
         checkLocalStorage()
         updateBestScore(score)
-        if (player.collision) {
-            gameOver = true
-            restartGameButton.style.display = 'block'
-        }
+        // if (player.collision) {
+        //     gameOver = true
+        //     restartGameButton.style.display = 'block'
+        // }
         displayStatusText(ctx)
         if (strokeOn) {
             player.strokeOn()
@@ -252,4 +239,10 @@ window.addEventListener('load', function () {
         if (!gameOver) requestAnimationFrame(animate)
     }
     animate(0)
+
+    toggleFullscreenButton.addEventListener('click', () =>
+        toggleFullscreen(canvas)
+    )
+    restartGameButton.addEventListener('click', restartGame)
+    toggleStrokeButton.addEventListener('click', toggleStroke)
 })
