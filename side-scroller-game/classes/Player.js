@@ -1,24 +1,56 @@
 import Character from './Character.js'
+import {
+    FallingLeft,
+    FallingRight,
+    JumpingLeft,
+    JumpingRight,
+    RunningLeft,
+    RunningRight,
+    SittingLeft,
+    SittingRight,
+    StandingLeft,
+    StandingRight
+} from './state.js'
 
-export default class Player extends Character {
+export default class Player2 extends Character {
     constructor(gameWidth, gameHeight) {
         super(gameWidth, gameHeight)
+        this.gameWidth = gameWidth
+        this.gameHeight = gameHeight
+        this.states = [
+            new StandingLeft(this),
+            new StandingRight(this),
+            new SittingLeft(this),
+            new SittingRight(this),
+            new RunningLeft(this),
+            new RunningRight(this),
+            new JumpingLeft(this),
+            new JumpingRight(this),
+            new FallingLeft(this),
+            new FallingRight(this)
+        ]
+        this.currentState = this.states[1]
         this.spriteWidth = 200
-        this.spriteHeight = 200
+        this.spriteHeight = 181.83
         this.scale = 1
         this.width = this.spriteWidth * this.scale
         this.height = this.spriteHeight * this.scale
+        this.image = document.getElementById('shadowDog')
         this.x = 50
         this.y = this.gameHeight - this.height
-        this.image = playerImage
-        this.maxFrameX = 9
-        this.vx = 10
+        this.frameX = 0
+        this.maxFrameX = 6
+        this.frameY = 0
+        this.speedX = 0
+        this.maxSpeedX = 10
         this.vy = 0
-        this.weight = 1
-        this.speed = 0
+        this.weight = 0.5
         this.collision = false
     }
+
     update(input, deltaTime, enemies) {
+        this.currentState.handleInput(input)
+
         // Collision Detection
         enemies.map((enemy) => {
             const dx =
@@ -31,53 +63,28 @@ export default class Player extends Character {
             }
         })
 
-        // Sprite Animation
+        // Animation sprite
         super.update(deltaTime)
 
-        // Controls
-        if (
-            input.keys.indexOf('ArrowRight') > -1 ||
-            input.keys.indexOf('SwipeRight') > -1
-        ) {
-            this.speed = this.vx
-        } else if (
-            input.keys.indexOf('ArrowLeft') > -1 ||
-            input.keys.indexOf('SwipeLeft') > -1
-        ) {
-            this.speed = -this.vx
-        } else if (
-            (input.keys.indexOf('ArrowUp') > -1 ||
-                input.keys.indexOf('SwipeUp') > -1) &&
-            this.onGround()
-        ) {
-            this.vy -= 30
-        } else {
-            this.speed = 0
-        }
-        // Horizontal movement
-        this.x += this.speed
-        if (this.x < 0) {
-            this.x = 0
-        } else if (this.x > this.gameWidth - this.width) {
-            this.x = this.gameWidth - this.width
-        }
-        // Vertical movement
+        // Horizontal Movement
+        this.x += this.speedX
+        if (this.x <= 0) this.x = 0
+        else if (this.x >= this.gameWidth - this.height)
+            this.x = this.gameWidth - this.height
+
+        // Vertical Movement
         this.y += this.vy
         if (!this.onGround()) {
             this.vy += this.weight
-            this.frameY = 1
-            this.maxFrameX = 5
         } else {
-            this.maxFrameX = 8
             this.vy = 0
-            this.frameY = 0
         }
-        if (this.y > this.gameHeight - this.height) {
+        if (this.y > this.gameHeight - this.height)
             this.y = this.gameHeight - this.height
-        }
     }
-    onGround() {
-        return this.y >= this.gameHeight - this.height
+    setState(state) {
+        this.currentState = this.states[state]
+        this.currentState.enter()
     }
     restart() {
         this.x = 50
@@ -85,6 +92,9 @@ export default class Player extends Character {
         this.maxFrameX = 8
         this.frameY = 0
         this.collision = false
+    }
+    onGround() {
+        return this.y >= this.gameHeight - this.height
     }
     draw(ctx, enemies) {
         function drawLine(x1, y1, x2, y2) {

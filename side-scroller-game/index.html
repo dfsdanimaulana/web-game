@@ -1,144 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="main.js" type="module" defer></script>
-  </head>
-  <body>
-    <div id="loading">Loading...</div>
-    <canvas id="canvas1"></canvas>
-    <img id="playerImage" src="img/player.png" />
-    <img id="shadowDog" src="img/shadow_dog.png" />
-    <img id="backgroundImage" src="img/background_single.png" />
-    enemy
-    <img id="worm" src="img/enemy_worm.png" alt="enemy 1" />
-    <img id="fly" src="img/enemy_fly.png" alt="enemy 1" />
-    <img id="plantEnemy" src="img/enemy_plant.png" alt="enemy 1" />
-    <img id="spider" src="img/enemy_spider.png" alt="enemy 2" />
-    <img id="bigSpider" src="img/enemy_spider_big.png" alt="enemy 2" />
-    <img id="ghost" src="img/enemy_ghost.png" alt="enemy 3" />
-    <img id="raven" src="img/enemy_raven.png" alt="enemy 4" />
-    <img id="bat" src="img/enemy_bat.png" alt="enemy 5" />
-    <img id="spiral" src="img/enemy_spiral.png" alt="enemy 6" />
-    <img id="blueDragon" src="img/enemy_blue_dragon.png" alt="enemy 7" />
-    <img id="skeletonBom" src="img/skeleton_bom.png" alt="enemy 8" />
-    <img id="bee" src="img/enemy_bee.png" alt="enemy 9" />
-    <img id="grassMonster" src="img/grass_monster.png" alt="enemy 9" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="main.js" type="module" defer></script>
+    </head>
+    <body>
+        <div id="loading">Loading...</div>
+        <canvas id="canvas1"></canvas>
+        <img id="shadowDog" src="img/shadow_white_dog.png" alt="player image" />
+        <img id="shadowDog" src="img/shadow_dog.png" />
+        <img id="backgroundImage" src="img/background_single.png" />
+        enemy
+        <img id="worm" src="img/enemy_worm.png" alt="enemy 1" />
+        <img id="fly" src="img/enemy_fly.png" alt="enemy 1" />
+        <img id="plantEnemy" src="img/enemy_plant.png" alt="enemy 1" />
+        <img id="spider" src="img/enemy_spider.png" alt="enemy 2" />
+        <img id="bigSpider" src="img/enemy_spider_big.png" alt="enemy 2" />
+        <img id="ghost" src="img/enemy_ghost.png" alt="enemy 3" />
+        <img id="raven" src="img/enemy_raven.png" alt="enemy 4" />
+        <img id="bat" src="img/enemy_bat.png" alt="enemy 5" />
+        <img id="spiral" src="img/enemy_spiral.png" alt="enemy 6" />
+        <img id="blueDragon" src="img/enemy_blue_dragon.png" alt="enemy 7" />
+        <img id="skeletonBom" src="img/skeleton_bom.png" alt="enemy 8" />
+        <img id="bee" src="img/enemy_bee.png" alt="enemy 9" />
+        <img id="grassMonster" src="img/grass_monster.png" alt="enemy 9" />
 
-    <!--parallax background -->
-    <div class="parallax">
-      <img id="bgLayer1_1" src="img/background/City2/Bright/Sky.png" alt="" />
-      <img id="bgLayer2_1" src="img/background/City2/Bright/back.png" alt="" />
-      <img
-        id="bgLayer3_1"
-        src="img/background/City2/Bright/houses3.png"
-        alt=""
-      />
-      <img
-        id="bgLayer4_1"
-        src="img/background/City2/Bright/houses1.png"
-        alt=""
-      />
-      <img
-        id="bgLayer5_1"
-        src="img/background/City2/Bright/minishop&callbox.png"
-        alt=""
-      />
-      <img
-        id="bgLayer6_1"
-        src="img/background/City2/Bright/road&lamps.png"
-        alt=""
-      />
-    </div>
-    <div class="parallax">
-      <img id="bgLayer1_2" src="img/background/City4/Bright/Sky.png" alt="" />
-      <img
-        id="bgLayer2_2"
-        src="img/background/City4/Bright/houses.png"
-        alt=""
-      />
-      <img
-        id="bgLayer3_2"
-        src="img/background/City4/Bright/houses2.png"
-        alt=""
-      />
-      <img
-        id="bgLayer4_2"
-        src="img/background/City4/Bright/houses1.png"
-        alt=""
-      />
-      <img
-        id="bgLayer5_2"
-        src="img/background/City4/Bright/umbrella&policebox.png"
-        alt=""
-      />
-      <img id="bgLayer6_2" src="img/background/City4/Bright/road.png" alt="" />
-    </div>
-    <div class="parallax">
-      <img id="bgLayer1_3" src="img/background/City3/Bright/sky.png" alt="" />
-      <img
-        id="bgLayer2_3"
-        src="img/background/City3/Bright/houses3.png"
-        alt=""
-      />
-      <img
-        id="bgLayer3_3"
-        src="img/background/City3/Bright/houses2.png"
-        alt=""
-      />
-      <img
-        id="bgLayer4_3"
-        src="img/background/City3/Bright/houses1.png"
-        alt=""
-      />
-      <img id="bgLayer5_3" src="img/background/City3/Bright/road.png" alt="" />
-      <img
-        id="bgLayer6_3"
-        src="img/background/City3/Bright/crosswalk.png"
-        alt=""
-      />
-    </div>
-    <div class="parallax">
-      <img id="bgLayer1_4" src="img/background/City1/Bright/Sky.png" alt="" />
-      <img
-        id="bgLayer2_4"
-        src="img/background/City1/Bright/buildings.png"
-        alt=""
-      />
-      <img id="bgLayer3_4" src="img/background/City1/Bright/wall2.png" alt="" />
-      <img id="bgLayer4_4" src="img/background/City1/Bright/wall1.png" alt="" />
-      <img
-        id="bgLayer5_4"
-        src="img/background/City1/Bright/boxes&container.png"
-        alt=""
-      />
-      <img
-        id="bgLayer6_4"
-        src="img/background/City1/Bright/wheels&hydrant.png"
-        alt=""
-      />
-      <img
-        id="bgLayer7_4"
-        src="img/background/City1/Bright/road&border.png"
-        alt=""
-      />
-    </div>
-    <div class="parallax">
-      <img id="bgLayer1_5" src="img/background/City5/layer-1.png" alt="" />
-      <img id="bgLayer2_5" src="img/background/City5/layer-2.png" alt="" />
-      <img id="bgLayer3_5" src="img/background/City5/layer-3.png" alt="" />
-      <img id="bgLayer4_5" src="img/background/City5/layer-4.png" alt="" />
-      <img id="bgLayer5_5" src="img/background/City5/layer-5.png" alt="" />
-    </div>
-    <div class="buttons">
-      <button id="toggleFullscreenButton">
-        <img src="img/fullscreen.png" alt="fullscreen" />
-      </button>
-      <button id="toggleStrokeButton">Toggle Stroke</button>
-    </div>
-    <button id="restartGameButton">Restart Game</button>
-  </body>
+        <!--parallax background -->
+        <div class="parallax">
+            <img
+                id="bgLayer1_1"
+                src="img/background/City2/Bright/Sky.png"
+                alt=""
+            />
+            <img
+                id="bgLayer2_1"
+                src="img/background/City2/Bright/back.png"
+                alt=""
+            />
+            <img
+                id="bgLayer3_1"
+                src="img/background/City2/Bright/houses3.png"
+                alt=""
+            />
+            <img
+                id="bgLayer4_1"
+                src="img/background/City2/Bright/houses1.png"
+                alt=""
+            />
+            <img
+                id="bgLayer5_1"
+                src="img/background/City2/Bright/minishop&callbox.png"
+                alt=""
+            />
+            <img
+                id="bgLayer6_1"
+                src="img/background/City2/Bright/road&lamps.png"
+                alt=""
+            />
+        </div>
+        <div class="parallax">
+            <img
+                id="bgLayer1_2"
+                src="img/background/City4/Bright/Sky.png"
+                alt=""
+            />
+            <img
+                id="bgLayer2_2"
+                src="img/background/City4/Bright/houses.png"
+                alt=""
+            />
+            <img
+                id="bgLayer3_2"
+                src="img/background/City4/Bright/houses2.png"
+                alt=""
+            />
+            <img
+                id="bgLayer4_2"
+                src="img/background/City4/Bright/houses1.png"
+                alt=""
+            />
+            <img
+                id="bgLayer5_2"
+                src="img/background/City4/Bright/umbrella&policebox.png"
+                alt=""
+            />
+            <img
+                id="bgLayer6_2"
+                src="img/background/City4/Bright/road.png"
+                alt=""
+            />
+        </div>
+        <div class="parallax">
+            <img
+                id="bgLayer1_3"
+                src="img/background/City3/Bright/sky.png"
+                alt=""
+            />
+            <img
+                id="bgLayer2_3"
+                src="img/background/City3/Bright/houses3.png"
+                alt=""
+            />
+            <img
+                id="bgLayer3_3"
+                src="img/background/City3/Bright/houses2.png"
+                alt=""
+            />
+            <img
+                id="bgLayer4_3"
+                src="img/background/City3/Bright/houses1.png"
+                alt=""
+            />
+            <img
+                id="bgLayer5_3"
+                src="img/background/City3/Bright/road.png"
+                alt=""
+            />
+            <img
+                id="bgLayer6_3"
+                src="img/background/City3/Bright/crosswalk.png"
+                alt=""
+            />
+        </div>
+        <div class="parallax">
+            <img
+                id="bgLayer1_4"
+                src="img/background/City1/Bright/Sky.png"
+                alt=""
+            />
+            <img
+                id="bgLayer2_4"
+                src="img/background/City1/Bright/buildings.png"
+                alt=""
+            />
+            <img
+                id="bgLayer3_4"
+                src="img/background/City1/Bright/wall2.png"
+                alt=""
+            />
+            <img
+                id="bgLayer4_4"
+                src="img/background/City1/Bright/wall1.png"
+                alt=""
+            />
+            <img
+                id="bgLayer5_4"
+                src="img/background/City1/Bright/boxes&container.png"
+                alt=""
+            />
+            <img
+                id="bgLayer6_4"
+                src="img/background/City1/Bright/wheels&hydrant.png"
+                alt=""
+            />
+            <img
+                id="bgLayer7_4"
+                src="img/background/City1/Bright/road&border.png"
+                alt=""
+            />
+        </div>
+        <div class="parallax">
+            <img
+                id="bgLayer1_5"
+                src="img/background/City5/layer-1.png"
+                alt=""
+            />
+            <img
+                id="bgLayer2_5"
+                src="img/background/City5/layer-2.png"
+                alt=""
+            />
+            <img
+                id="bgLayer3_5"
+                src="img/background/City5/layer-3.png"
+                alt=""
+            />
+            <img
+                id="bgLayer4_5"
+                src="img/background/City5/layer-4.png"
+                alt=""
+            />
+            <img
+                id="bgLayer5_5"
+                src="img/background/City5/layer-5.png"
+                alt=""
+            />
+        </div>
+        <div class="buttons">
+            <button id="toggleFullscreenButton">
+                <img src="img/fullscreen.png" alt="fullscreen" />
+            </button>
+            <button id="toggleStrokeButton">Toggle Stroke</button>
+        </div>
+        <button id="restartGameButton">Restart Game</button>
+    </body>
 </html>

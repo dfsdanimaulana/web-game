@@ -35,3 +35,18 @@ export function randomBackground(backgrounds) {
         isValueArray
     }
 }
+
+
+
+ export function checkLocalStorage() {
+     if (!localStorage.getItem('bestScore')) {
+         localStorage.setItem('bestScore', '0')
+     }
+ }
+
+ export function updateBestScore(newScore) {
+     const currentBestScore = parseInt(localStorage.getItem('bestScore'))
+     if (newScore > currentBestScore) {
+         localStorage.setItem('bestScore', newScore.toString())
+     }
+ }

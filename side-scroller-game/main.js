@@ -1,16 +1,22 @@
 /** @type {HTMLCanvasElement} */
+
+import { Ghost, Raven, Bat, Bee, BlueDragon } from './enemies/FlyingEnemy.js'
+import { Spider, BigSpider } from './enemies/ClimbEnemy.js'
+import createParallaxBackground from './function/createParallaxBackground.js'
+import {
+    randomBackground,
+    toggleFullscreen,
+    checkLocalStorage,
+    updateBestScore
+} from './utils.js'
 import {
     SkeletonBom,
     GrassMonster,
     Worm,
     PlantEnemy
 } from './enemies/GroundEnemy.js'
-import { Ghost, Raven, Bat, Bee, BlueDragon } from './enemies/FlyingEnemy.js'
-import { Spider, BigSpider } from './enemies/ClimbEnemy.js'
-import Player from './classes/Player.js'
-import InputHandler from './classes/InputHandler.js'
-import { randomBackground, toggleFullscreen } from './utils.js'
-import createParallaxBackground from './function/createParallaxBackground.js'
+import Player from './classes/player.js'
+import InputHandler from './classes/input.js'
 
 window.addEventListener('load', function () {
     loading.style.display = 'none'
@@ -18,6 +24,7 @@ window.addEventListener('load', function () {
     const ctx = canvas.getContext('2d')
     canvas.width = 1600
     canvas.height = 720
+
     let enemies = []
     let score = 0
     let gameSpeed = 10
@@ -31,15 +38,6 @@ window.addEventListener('load', function () {
     const input = new InputHandler()
     const player = new Player(canvas.width, canvas.height)
     const backgrounds = createParallaxBackground(gameSpeed)
-
-    function restartGame() {
-        gameOver = false
-        restartGameButton.style.display = 'none'
-        player.restart()
-        enemies = []
-        score = 0
-        animate(0)
-    }
 
     const enemiesData = [
         {
@@ -159,49 +157,6 @@ window.addEventListener('load', function () {
         enemies = enemies.filter((enemy) => !enemy.markedForDeletion)
     }
 
-    function toggleStroke() {
-        strokeOn = !strokeOn
-    }
-
-    function checkLocalStorage() {
-        if (!localStorage.getItem('bestScore')) {
-            localStorage.setItem('bestScore', '0')
-        }
-    }
-
-    function updateBestScore(newScore) {
-        const currentBestScore = parseInt(localStorage.getItem('bestScore'))
-        if (newScore > currentBestScore) {
-            localStorage.setItem('bestScore', newScore.toString())
-        }
-    }
-
-    function displayStatusText(context) {
-        context.textAlign = 'left'
-        context.font = '40px Helvetica'
-        context.fillStyle = 'black'
-        context.fillText('Score: ' + score, 20, 50)
-        context.fillStyle = 'white'
-        context.fillText('Score: ' + score, 17, 47)
-
-        context.textAlign = 'left'
-        context.font = '40px Helvetica'
-        context.fillStyle = 'black'
-        context.fillText('Best Score: ' + bestScore, 20, 95)
-        context.fillStyle = 'white'
-        context.fillText('Best Score: ' + bestScore, 17, 92)
-
-        if (gameOver) {
-            context.textAlign = 'center'
-            context.fillStyle = 'black'
-            context.fillText('GAME OVER!', canvas.width / 2, 200)
-            context.fillStyle = 'white'
-            context.fillText('GAME OVER!', canvas.width / 2 - 2, 196)
-        }
-    }
-
-    
-
     const { randomValue, isValueArray } = randomBackground(backgrounds)
 
     let lastTime = 0
@@ -218,17 +173,14 @@ window.addEventListener('load', function () {
             randomValue.draw(ctx)
             randomValue.update(deltaTime)
         }
+        player.update(input.lastKey, deltaTime, enemies)
         player.draw(ctx, enemies)
-        player.update(input, deltaTime, enemies)
         handleEnemy(deltaTime)
         bestScore = localStorage.getItem('bestScore')
         checkLocalStorage()
         updateBestScore(score)
-        // if (player.collision) {
-        //     gameOver = true
-        //     restartGameButton.style.display = 'block'
-        // }
         displayStatusText(ctx)
+
         if (strokeOn) {
             player.strokeOn()
             enemies.map((object) => object.strokeOn())
@@ -236,13 +188,53 @@ window.addEventListener('load', function () {
             player.strokeOff()
             enemies.map((object) => object.strokeOff())
         }
+        if (player.collision) {
+            gameOver = true
+            restartGameButton.style.display = 'block'
+        }
         if (!gameOver) requestAnimationFrame(animate)
     }
     animate(0)
+
+    function restartGame() {
+        gameOver = false
+        restartGameButton.style.display = 'none'
+        player.restart()
+        enemies = []
+        score = 0
+        animate(0)
+    }
 
     toggleFullscreenButton.addEventListener('click', () =>
         toggleFullscreen(canvas)
     )
     restartGameButton.addEventListener('click', restartGame)
     toggleStrokeButton.addEventListener('click', toggleStroke)
+
+    function toggleStroke() {
+        strokeOn = !strokeOn
+    }
+
+    function displayStatusText(context) {
+        context.textAlign = 'left'
+        context.font = '40px Helvetica'
+        context.fillStyle = 'black'
+        context.fillText('Score: ' + score, 20, 50)
+        context.fillStyle = 'white'
+        context.fillText('Score: ' + score, 17, 47)
+        context.textAlign = 'left'
+        context.font = '40px Helvetica'
+        context.fillStyle = 'black'
+        context.fillText('Best Score: ' + bestScore, 20, 95)
+        context.fillStyle = 'white'
+        context.fillText('Best Score: ' + bestScore, 17, 92)
+
+        if (gameOver) {
+            context.textAlign = 'center'
+            context.fillStyle = 'black'
+            context.fillText('GAME OVER!', canvas.width / 2, 200)
+            context.fillStyle = 'white'
+            context.fillText('GAME OVER!', canvas.width / 2 - 2, 196)
+        }
+    }
 })
