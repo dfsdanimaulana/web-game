@@ -28,12 +28,14 @@ export class StandingLeft extends State {
         this.player.maxFrameX = 6
     }
     handleInput(input) {
-        if (input === 'PRESS right') this.player.setState(states.RUNNING_RIGHT)
-        else if (input === 'PRESS left')
+        if (input === 'PRESS right' || input === 'SWIPE right')
+            this.player.setState(states.RUNNING_RIGHT)
+        else if (input === 'PRESS left' || input === 'SWIPE left')
             this.player.setState(states.RUNNING_LEFT)
-        else if (input === 'PRESS down')
+        else if (input === 'PRESS down' || input === 'SWIPE down')
             this.player.setState(states.SITTING_LEFT)
-        else if (input === 'PRESS up') this.player.setState(states.JUMPING_LEFT)
+        else if (input === 'PRESS up' || input === 'SWIPE up')
+            this.player.setState(states.JUMPING_LEFT)
     }
 }
 export class StandingRight extends State {
@@ -47,12 +49,13 @@ export class StandingRight extends State {
         this.player.maxFrameX = 6
     }
     handleInput(input) {
-        if (input === 'PRESS left') this.player.setState(states.RUNNING_LEFT)
-        else if (input === 'PRESS right')
+        if (input === 'PRESS left' || input === 'SWIPE left')
+            this.player.setState(states.RUNNING_LEFT)
+        else if (input === 'PRESS right' || input === 'SWIPE right')
             this.player.setState(states.RUNNING_RIGHT)
-        else if (input === 'PRESS down')
+        else if (input === 'PRESS down' || input === 'SWIPE down')
             this.player.setState(states.SITTING_RIGHT)
-        else if (input === 'PRESS up')
+        else if (input === 'PRESS up' || input === 'SWIPE up')
             this.player.setState(states.JUMPING_RIGHT)
     }
 }
@@ -67,8 +70,9 @@ export class SittingLeft extends State {
         this.player.maxFrameX = 4
     }
     handleInput(input) {
-        if (input === 'PRESS right') this.player.setState(states.SITTING_RIGHT)
-        else if (input === 'RELEASE down')
+        if (input === 'PRESS right' || input === 'SWIPE right')
+            this.player.setState(states.SITTING_RIGHT)
+        else if (input === 'RELEASE down' || input === 'RELEASE swipeDown')
             this.player.setState(states.STANDING_LEFT)
     }
 }
@@ -83,8 +87,9 @@ export class SittingRight extends State {
         this.player.maxFrameX = 4
     }
     handleInput(input) {
-        if (input === 'PRESS left') this.player.setState(states.SITTING_LEFT)
-        else if (input === 'RELEASE down')
+        if (input === 'PRESS left' || input === 'SWIPE left')
+            this.player.setState(states.SITTING_LEFT)
+        else if (input === 'RELEASE down' || input === 'RELEASE swipeDown')
             this.player.setState(states.STANDING_RIGHT)
     }
 }
@@ -99,10 +104,11 @@ export class RunningLeft extends State {
         this.player.maxFrameX = 8
     }
     handleInput(input) {
-        if (input === 'PRESS right') this.player.setState(states.RUNNING_RIGHT)
-        else if (input === 'RELEASE left')
+        if (input === 'PRESS right' || input === 'SWIPE right')
+            this.player.setState(states.RUNNING_RIGHT)
+        else if (input === 'RELEASE left' || input === 'RELEASE swipeLeft')
             this.player.setState(states.STANDING_LEFT)
-        else if (input === 'PRESS down')
+        else if (input === 'PRESS down' || input === 'SWIPE down')
             this.player.setState(states.SITTING_LEFT)
     }
 }
@@ -117,10 +123,11 @@ export class RunningRight extends State {
         this.player.maxFrameX = 8
     }
     handleInput(input) {
-        if (input === 'PRESS left') this.player.setState(states.RUNNING_LEFT)
-        else if (input === 'RELEASE right')
+        if (input === 'PRESS left' || input === 'SWIPE left')
+            this.player.setState(states.RUNNING_LEFT)
+        else if (input === 'RELEASE right' || input === 'RELEASE swipeRight')
             this.player.setState(states.STANDING_RIGHT)
-        else if (input === 'PRESS down')
+        else if (input === 'PRESS down' || input === 'SWIPE down')
             this.player.setState(states.SITTING_RIGHT)
     }
 }
@@ -136,7 +143,8 @@ export class JumpingLeft extends State {
         this.player.maxFrameX = 6
     }
     handleInput(input) {
-        if (input === 'PRESS right') this.player.setState(states.JUMPING_RIGHT)
+        if (input === 'PRESS right' || input === 'SWIPE right')
+            this.player.setState(states.JUMPING_RIGHT)
         else if (this.player.onGround())
             this.player.setState(states.STANDING_LEFT)
         else if (this.player.vy > 0) this.player.setState(states.FALLING_LEFT)
@@ -154,7 +162,8 @@ export class JumpingRight extends State {
         this.player.maxFrameX = 6
     }
     handleInput(input) {
-        if (input === 'PRESS left') this.player.setState(states.JUMPING_LEFT)
+        if (input === 'PRESS left' || input === 'SWIPE left')
+            this.player.setState(states.JUMPING_LEFT)
         else if (this.player.onGround())
             this.player.setState(states.STANDING_RIGHT)
         else if (this.player.vy > 0) this.player.setState(states.FALLING_RIGHT)
@@ -170,7 +179,8 @@ export class FallingLeft extends State {
         this.player.maxFrameX = 6
     }
     handleInput(input) {
-        if (input === 'PRESS right') this.player.setState(states.FALLING_RIGHT)
+        if (input === 'PRESS right' || input === 'SWIPE right')
+            this.player.setState(states.FALLING_RIGHT)
         else if (this.player.onGround())
             this.player.setState(states.STANDING_LEFT)
     }
@@ -185,7 +195,8 @@ export class FallingRight extends State {
         this.player.maxFrameX = 6
     }
     handleInput(input) {
-        if (input === 'PRESS left') this.player.setState(states.FALLING_LEFT)
+        if (input === 'PRESS left' || input === 'SWIPE left')
+            this.player.setState(states.FALLING_LEFT)
         else if (this.player.onGround())
             this.player.setState(states.STANDING_RIGHT)
     }

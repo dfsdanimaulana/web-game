@@ -1,10 +1,12 @@
 export default class InputHandler {
     constructor() {
         this.lastKey = ''
-        this.keys = []
-        this.touchY = ''
-        this.touchX = ''
-        this.touchTresHold = 30
+        this.swipeStartX = 0
+        this.swipeStartY = 0
+        this.swipeEndX = 0
+        this.swipeEndY = 0
+        this.previousSwipeDirection = ''
+
         window.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'ArrowLeft':
@@ -55,47 +57,64 @@ export default class InputHandler {
             }
         })
 
+        // Touch events for swipe on mobile
         window.addEventListener('touchstart', (e) => {
-            // initial touch position
-            this.touchY = e.changedTouches[0].pageY
-            this.touchX = e.changedTouches[0].pageX
+            this.swipeStartX = e.touches[0].clientX
+            this.swipeStartY = e.touches[0].clientY
         })
 
         window.addEventListener('touchmove', (e) => {
-            // Calculate swipe distance on X-axis and Y-axis
-            const swipeDistanceY = e.changedTouches[0].pageY - this.touchY
-            const swipeDistanceX = e.changedTouches[0].pageX - this.touchX
-
-            if (
-                swipeDistanceY < -this.touchTresHold &&
-                this.keys.indexOf('SwipeUp') === -1
-            ) {
-                this.keys.push('SwipeUp')
-            } else if (
-                swipeDistanceY > this.touchTresHold &&
-                this.keys.indexOf('SwipeDown') === -1
-            ) {
-                this.keys.push('SwipeDown')
-            }
-            if (
-                swipeDistanceX < -this.touchTresHold &&
-                this.keys.indexOf('SwipeLeft') === -1
-            ) {
-                this.keys.push('SwipeLeft') // Add SwipeLeft to keys array
-            } else if (
-                swipeDistanceX > this.touchTresHold &&
-                this.keys.indexOf('SwipeRight') === -1
-            ) {
-                this.keys.push('SwipeRight') // Add SwipeRight to keys array
-            }
+            this.swipeEndX = e.changedTouches[0].clientX
+            this.swipeEndY = e.changedTouches[0].clientY
+            this.handleSwipe()
         })
-
         window.addEventListener('touchend', (e) => {
-            console.log(this.keys)
-            this.keys.splice(this.keys.indexOf('SwipeUp'), 1)
-            this.keys.splice(this.keys.indexOf('SwipeDown'), 1)
-            this.keys.splice(this.keys.indexOf('SwipeLeft'), 1) // Remove SwipeLeft from keys array
-            this.keys.splice(this.keys.indexOf('SwipeRight'), 1) // Remove SwipeRight from keys array
+            this.getReleasedSwipeDirection()
         })
+    }
+
+    handleSwipe() {
+        const dx = this.swipeEndX - this.swipeStartX
+        const dy = this.swipeEndY - this.swipeStartY
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            // Horizontal swipe
+            if (dx > 0) {
+                this.lastKey = 'SWIPE right'
+                this.previousSwipeDirection = 'right'
+            } else {
+                this.lastKey = 'SWIPE left'
+                this.previousSwipeDirection = 'left'
+            }
+        } else {
+            // Vertical swipe
+            if (dy > 0) {
+                this.lastKey = 'SWIPE down'
+                this.previousSwipeDirection = 'down'
+            } else {
+                this.lastKey = 'SWIPE up'
+                this.previousSwipeDirection = 'up'
+            }
+        }
+    }
+
+    // Method to get the released swipe direction
+    getReleasedSwipeDirection() {
+        switch (this.previousSwipeDirection) {
+            case 'up':
+                this.lastKey = 'RELEASE swipeUp'
+                break
+            case 'down':
+                this.lastKey = 'RELEASE swipeDown'
+                break
+            case 'right':
+                this.lastKey = 'RELEASE swipeRight'
+                break
+            case 'left':
+                this.lastKey = 'RELEASE swipeLeft'
+                break
+            default:
+                this.lastKey = this.lastKey
+        }
     }
 }
