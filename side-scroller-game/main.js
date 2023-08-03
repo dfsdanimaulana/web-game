@@ -24,7 +24,7 @@ import {
   Worm,
   PlantEnemy
 } from './enemies/GroundEnemy.js'
-import Player from './classes/player.js'
+import Player from './classes/WhiteDog.js'
 import InputHandler from './classes/input.js'
 
 window.addEventListener('load', function () {

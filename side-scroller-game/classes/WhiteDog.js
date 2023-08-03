@@ -12,7 +12,7 @@ import {
   StandingRight
 } from './state.js'
 
-export default class Player2 extends Character {
+export default class WhiteDog extends Character {
   constructor(gameWidth, gameHeight) {
     super(gameWidth, gameHeight)
     this.gameWidth = gameWidth
