@@ -12,8 +12,6 @@ import {
   Spider,
   BigSpider
 } from './enemies/ClimbEnemy.js'
-import createParallaxBackground from './function/createParallaxBackground.js'
-import displayStatusText from './function/displayStatusText.js'
 import {
   randomBackground,
   toggleFullscreen,
@@ -26,6 +24,8 @@ import {
   Worm,
   PlantEnemy
 } from './enemies/GroundEnemy.js'
+import createParallaxBackground from './function/createParallaxBackground.js'
+import displayStatusText from './function/displayStatusText.js'
 import Player from './classes/player.js'
 import InputHandler from './classes/input.js'
 import Explosion from './classes/explosion.js'
@@ -221,21 +221,27 @@ window.addEventListener('load', function () {
       'ROLLING UP LEFT'
     ]
     enemies.forEach((enemy) => {
-      if (player.collision) {
-        if (damageState.includes(player.currentState.state)) {
-          enemy.delete()
-          player.collisionReset()
+      enemy.update(deltaTime)
+      enemy.draw(ctx)
+    })
 
-          // Create explosion effect
+    // Collision Detection
+    enemies.forEach((enemy) => {
+      const dx =
+      (enemy.x + enemy.width / 2 - 20) - (player.x + player.width / 2)
+      const dy =
+      (enemy.y + enemy.height / 2) - (player.y + player.width / 2 + 20)
+      const distance = Math.sqrt(dx * dx + dy * dy)
+      if (distance < (enemy.width / 3 + player.width / 3)) {
+        if (damageState.includes(player.currentState.state)) {
           explosions.push(new Explosion(enemy.x, enemy.y, enemy.width))
+          enemy.delete()
+        } else {
+          gameOver = true
         }
       }
     })
 
-    enemies.forEach((enemy) => {
-      enemy.update(deltaTime)
-      enemy.draw(ctx)
-    })
     explosions.forEach((object) => {
       object.update(deltaTime)
       object.draw(ctx)
@@ -276,8 +282,7 @@ window.addEventListener('load', function () {
       player.strokeOff()
       enemies.map((object) => object.strokeOff())
     }
-    if (player.collision && !devMode) {
-      gameOver = true
+    if (gameOver && !devMode) {
       restartGameButton.style.display = 'block'
     }
     displayStatusText(ctx,

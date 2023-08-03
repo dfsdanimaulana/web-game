@@ -4,6 +4,7 @@ export class BlueDragon extends FlyingEnemy {
     constructor(gameWidth, gameHeight) {
         super(gameWidth, gameHeight)
         this.name = 'BlueDragon'
+        this.scale = Math.random()*0.6 + 0.6
         this.spriteWidth = 473
         this.spriteHeight = 468
         this.width = this.spriteWidth * this.scale
