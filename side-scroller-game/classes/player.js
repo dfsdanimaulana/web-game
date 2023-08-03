@@ -18,7 +18,7 @@ import {
     RollingUpRight
 } from './state.js'
 
-export default class WhiteDog extends Character {
+export default class Player extends Character {
     constructor(gameWidth, gameHeight, groundMargin) {
         super(gameWidth, gameHeight)
         this.gameWidth = gameWidth
@@ -96,6 +96,9 @@ export default class WhiteDog extends Character {
         if (this.y <= 0) this.y = 0
         if (this.y > this.gameHeight - this.height - this.groundMargin)
             this.y = this.gameHeight - this.height - this.groundMargin
+    }
+    collisionReset() {
+        this.collision = false
     }
     setState(state) {
         this.currentState = this.states[state]

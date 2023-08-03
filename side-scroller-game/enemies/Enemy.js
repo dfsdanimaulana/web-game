@@ -8,6 +8,9 @@ export default class Enemy extends Character {
         this.vx = Math.random() * 0.1 + 0.1
         this.markedForDeletion = false
     }
+    delete() {
+        this.markedForDeletion = true
+    }
     update(deltaTime) {
         super.update(deltaTime)
         this.x -= this.vx * deltaTime

@@ -22,7 +22,7 @@ import {
     Worm,
     PlantEnemy
 } from './enemies/GroundEnemy.js'
-import Player from './classes/WhiteDog.js'
+import Player from './classes/player.js'
 import InputHandler from './classes/input.js'
 
 window.addEventListener('load', function () {
@@ -32,7 +32,7 @@ window.addEventListener('load', function () {
     canvas.width = 1600
     canvas.height = 720
 
-    let devMode = true
+    let devMode = false
     let enemies = []
     let score = 0
     let gameSpeed = 10
@@ -106,7 +106,7 @@ window.addEventListener('load', function () {
         }
     ]
 
-    function handleEnemy(deltaTime) {
+    function handleEnemy(deltaTime, player) {
         if (enemyTimer > enemyInterval + randomEnemyInterval) {
             const totalWeight = enemiesData.reduce(
                 (acc, enemy) => acc + enemy.weight,
@@ -216,6 +216,24 @@ window.addEventListener('load', function () {
             enemy.draw(ctx)
         })
 
+        const damageState = [
+            'ROLLING LEFT',
+            'ROLLING RIGHT',
+            'ROLLING DOWN LEFT',
+            'ROLLING DOWN RIGHT',
+            'ROLLING UP RIGHT',
+            'ROLLING UP LEFT'
+        ]
+        enemies.forEach((enemy) => {
+            if (player.collision) {
+                if (damageState.includes(player.currentState.state)) {
+                    enemy.delete()
+                    player.collisionReset()
+                    // Create explosion effect
+                }
+            }
+        })
+
         score += enemies.filter((enemy) => enemy.markedForDeletion).length
         enemies = enemies.filter((enemy) => !enemy.markedForDeletion)
     }
@@ -237,7 +255,7 @@ window.addEventListener('load', function () {
         }
         player.update(input.lastKey, deltaTime, enemies)
         player.draw(ctx, enemies)
-        handleEnemy(deltaTime)
+        handleEnemy(deltaTime, player)
         bestScore = localStorage.getItem('bestScore')
         checkLocalStorage()
         updateBestScore(score)
