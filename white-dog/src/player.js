@@ -12,7 +12,9 @@ import {
   RollingLeft,
   RollingRight,
   RollingDownLeft,
-  RollingDownRight
+  RollingDownRight,
+  RollingUpLeft,
+  RollingUpRight
 } from './state.js'
 
 export default class Player {
@@ -33,7 +35,9 @@ export default class Player {
       new RollingLeft(this),
       new RollingRight(this),
       new RollingDownLeft(this),
-      new RollingDownRight(this)
+      new RollingDownRight(this),
+      new RollingUpLeft(this),
+      new RollingUpRight(this)
     ]
     this.currentState = this.states[1]
     this.spriteWidth = 200
@@ -54,6 +58,8 @@ export default class Player {
     this.fps = 30
     this.frameTimer = 0
     this.frameInterval = 1000 / this.fps
+    this.canRollUp = true
+    this.canDoubleJump = true
   }
 
   update(input, deltaTime) {
@@ -81,6 +87,7 @@ export default class Player {
     } else {
       this.vy = 0
     }
+    if (this.y < this.height) this.y = this.height
     if (this.y > this.gameHeight - this.height)
       this.y = this.gameHeight - this.height
   }

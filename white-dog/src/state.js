@@ -12,7 +12,9 @@ export const states = {
   ROLLING_LEFT: 10,
   ROLLING_RIGHT: 11,
   ROLLING_DOWN_LEFT: 12,
-  ROLLING_DOWN_RIGHT: 13
+  ROLLING_DOWN_RIGHT: 13,
+  ROLLING_UP_RIGHT: 14,
+  ROLLING_UP_LEFT: 15
 }
 
 class State {
@@ -207,6 +209,8 @@ export class FallingLeft extends State {
   handleInput(input) {
     if (input === 'PRESS right' || input === 'SWIPE right')
       this.player.setState(states.FALLING_RIGHT)
+    else if (this.player.canRollUp && !this.player.onGround() && (input === 'PRESS up' || input === 'SWIPE up'))
+      this.player.setState(states.ROLLING_UP_RIGHT)
     else if (input === 'PRESS down' || input === 'SWIPE down')
       this.player.setState(states.ROLLING_DOWN_LEFT)
     else if (this.player.onGround())
@@ -225,6 +229,8 @@ export class FallingRight extends State {
   handleInput(input) {
     if (input === 'PRESS left' || input === 'SWIPE left')
       this.player.setState(states.FALLING_LEFT)
+    else if (this.player.canRollUp && !this.player.onGround() && (input === 'PRESS up' || input === 'SWIPE up'))
+      this.player.setState(states.ROLLING_UP_LEFT)
     else if (input === 'PRESS down' || input === 'SWIPE down')
       this.player.setState(states.ROLLING_DOWN_RIGHT)
     else if (this.player.onGround())
@@ -298,6 +304,40 @@ export class RollingDownRight extends State {
     this.player.maxFrameX = 6
     this.player.weight = 2
     this.player.vy*=-1
+  }
+  handleInput(input) {
+    if (this.player.onGround())
+      this.player.setState(states.STANDING_RIGHT)
+  }
+}
+
+export class RollingUpLeft extends State {
+  constructor(player) {
+    super('ROLLING UP LEFT')
+    this.player = player
+  }
+  enter() {
+    this.player.frameY = 11
+    this.player.maxFrameX = 6
+    this.player.vy -= 20
+    this.player.speedX = -this.player.maxSpeedX * 0.5
+  }
+  handleInput(input) {
+    if (this.player.onGround())
+      this.player.setState(states.STANDING_LEFT)
+  }
+}
+
+export class RollingUpRight extends State {
+  constructor(player) {
+    super('ROLLING UP RIGHT')
+    this.player = player
+  }
+  enter() {
+    this.player.frameY = 10
+    this.player.maxFrameX = 6
+    this.player.vy -= 20
+    this.player.speedX = this.player.maxSpeedX * 0.5
   }
   handleInput(input) {
     if (this.player.onGround())
