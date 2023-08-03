@@ -9,6 +9,8 @@ import {
   SittingRight,
   StandingLeft,
   StandingRight,
+  RollingLeft,
+  RollingRight,
   RollingDownLeft,
   RollingDownRight
 } from './state.js'
@@ -28,13 +30,15 @@ export default class Player {
       new JumpingRight(this),
       new FallingLeft(this),
       new FallingRight(this),
+      new RollingLeft(this),
+      new RollingRight(this),
       new RollingDownLeft(this),
       new RollingDownRight(this)
     ]
     this.currentState = this.states[1]
     this.spriteWidth = 200
     this.spriteHeight = 181.83
-    this.scale = 1
+    this.scale = 0.5
     this.width = this.spriteWidth * this.scale
     this.height = this.spriteHeight * this.scale
     this.image = document.getElementById('shadowDog')
