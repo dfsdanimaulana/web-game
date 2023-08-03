@@ -1,7 +1,6 @@
-
 import Background, { Layer } from '../classes/Background.js'
 
-const generateBackgroundLayer = (imageLayer, gameSpeed) => {
+const generateBackgroundLayer = (imageLayer, gameSpeed, groundMargin = 0) => {
     const backgroundLayer = []
     const speedModifier = 0.2
 
@@ -10,7 +9,8 @@ const generateBackgroundLayer = (imageLayer, gameSpeed) => {
             new Layer(
                 imageLayer[i],
                 gameSpeed,
-                speedModifier + speedModifier * i
+                speedModifier + speedModifier * i,
+                groundMargin
             )
         )
     }
@@ -60,7 +60,11 @@ const createParallaxBackground = (gameSpeed) => {
         bgLayer6_4,
         bgLayer7_4
     ]
-    const backgroundLayer4 = generateBackgroundLayer(imageLayer4, gameSpeed)
+    const backgroundLayer4 = generateBackgroundLayer(
+        imageLayer4,
+        gameSpeed,
+        150
+    )
 
     const imageLayer5 = [
         bgLayer1_5,
@@ -69,7 +73,11 @@ const createParallaxBackground = (gameSpeed) => {
         bgLayer4_5,
         bgLayer5_5
     ]
-    const backgroundLayer5 = generateBackgroundLayer(imageLayer5, gameSpeed)
+    const backgroundLayer5 = generateBackgroundLayer(
+        imageLayer5,
+        gameSpeed,
+        117
+    )
 
     return [
         forestBackground,

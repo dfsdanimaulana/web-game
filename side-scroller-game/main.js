@@ -1,6 +1,13 @@
 /** @type {HTMLCanvasElement} */
 
-import { Ghost, Raven, Bat, Bee, BlueDragon } from './enemies/FlyingEnemy.js'
+import {
+    Ghost,
+    Raven,
+    Bat,
+    Bee,
+    BlueDragon,
+    Fly
+} from './enemies/FlyingEnemy.js'
 import { Spider, BigSpider } from './enemies/ClimbEnemy.js'
 import createParallaxBackground from './function/createParallaxBackground.js'
 import {
@@ -36,18 +43,29 @@ window.addEventListener('load', function () {
     let randomEnemyInterval = Math.random() * 1000 + 500
     let strokeOn = false
     let showGameStatus = false
+    let groundMargin = 0
 
     const input = new InputHandler()
-    const player = new Player(canvas.width, canvas.height)
     const backgrounds = createParallaxBackground(gameSpeed)
+    const { randomValue, isValueArray } = randomBackground(backgrounds)
+    if (isValueArray) {
+        groundMargin = randomValue[0].groundMargin
+    } else {
+        groundMargin = randomValue.groundMargin
+    }
+    const player = new Player(canvas.width, canvas.height, groundMargin)
 
     const enemiesData = [
         {
             type: 'ghost',
-            weight: 1
+            weight: 3
         },
         {
             type: 'worm',
+            weight: 3
+        },
+        {
+            type: 'fly',
             weight: 3
         },
         {
@@ -60,11 +78,11 @@ window.addEventListener('load', function () {
         },
         {
             type: 'bigSpider',
-            weight: 5
+            weight: 1
         },
         {
             type: 'raven',
-            weight: 5
+            weight: 2
         },
         {
             type: 'bat',
@@ -80,7 +98,7 @@ window.addEventListener('load', function () {
         },
         {
             type: 'skeletonBom',
-            weight: 0
+            weight: 1
         },
         {
             type: 'grassMonster',
@@ -107,37 +125,80 @@ window.addEventListener('load', function () {
 
             switch (chosenEnemy) {
                 case 'ghost':
-                    enemies.push(new Ghost(canvas.width, canvas.height))
+                    enemies.push(
+                        new Ghost(canvas.width, canvas.height, groundMargin)
+                    )
+                    break
+                case 'fly':
+                    enemies.push(
+                        new Fly(canvas.width, canvas.height, groundMargin)
+                    )
                     break
                 case 'worm':
-                    enemies.push(new Worm(canvas.width, canvas.height))
+                    enemies.push(
+                        new Worm(canvas.width, canvas.height, groundMargin)
+                    )
                     break
                 case 'plant':
-                    enemies.push(new PlantEnemy(canvas.width, canvas.height))
+                    enemies.push(
+                        new PlantEnemy(
+                            canvas.width,
+                            canvas.height,
+                            groundMargin
+                        )
+                    )
                     break
                 case 'spider':
-                    enemies.push(new Spider(canvas.width, canvas.height))
+                    enemies.push(
+                        new Spider(canvas.width, canvas.height, groundMargin)
+                    )
                     break
                 case 'bigSpider':
-                    enemies.push(new BigSpider(canvas.width, canvas.height))
+                    enemies.push(
+                        new BigSpider(canvas.width, canvas.height, groundMargin)
+                    )
                     break
                 case 'skeletonBom':
-                    enemies.push(new SkeletonBom(canvas.width, canvas.height))
+                    enemies.push(
+                        new SkeletonBom(
+                            canvas.width,
+                            canvas.height,
+                            groundMargin
+                        )
+                    )
                     break
                 case 'raven':
-                    enemies.push(new Raven(canvas.width, canvas.height))
+                    enemies.push(
+                        new Raven(canvas.width, canvas.height, groundMargin)
+                    )
                     break
                 case 'bat':
-                    enemies.push(new Bat(canvas.width, canvas.height))
+                    enemies.push(
+                        new Bat(canvas.width, canvas.height, groundMargin)
+                    )
                     break
                 case 'blueDragon':
-                    enemies.push(new BlueDragon(canvas.width, canvas.height))
+                    enemies.push(
+                        new BlueDragon(
+                            canvas.width,
+                            canvas.height,
+                            groundMargin
+                        )
+                    )
                     break
                 case 'bee':
-                    enemies.push(new Bee(canvas.width, canvas.height))
+                    enemies.push(
+                        new Bee(canvas.width, canvas.height, groundMargin)
+                    )
                     break
                 case 'grassMonster':
-                    enemies.push(new GrassMonster(canvas.width, canvas.height))
+                    enemies.push(
+                        new GrassMonster(
+                            canvas.width,
+                            canvas.height,
+                            groundMargin
+                        )
+                    )
                     break
                 default:
                     break
@@ -159,13 +220,12 @@ window.addEventListener('load', function () {
         enemies = enemies.filter((enemy) => !enemy.markedForDeletion)
     }
 
-    const { randomValue, isValueArray } = randomBackground(backgrounds)
-
     let lastTime = 0
     function animate(timeStamp) {
         const deltaTime = timeStamp - lastTime
         lastTime = timeStamp
         ctx.clearRect(0, 0, canvas.width, canvas.height)
+
         if (isValueArray) {
             randomValue.map((layer) => {
                 layer.update(deltaTime)

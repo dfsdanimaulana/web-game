@@ -1,4 +1,4 @@
-import Character from './Character.js'
+import Character from '../classes/Character.js'
 
 export default class Enemy extends Character {
     constructor(gameWidth, gameHeight) {
@@ -16,8 +16,9 @@ export default class Enemy extends Character {
 }
 
 export class GroundEnemy extends Enemy {
-    constructor(gameWidth, gameHeight) {
+    constructor(gameWidth, gameHeight, groundMargin) {
         super(gameWidth, gameHeight)
+        this.groundMargin = groundMargin
     }
 }
 
@@ -46,4 +47,3 @@ export class ClimbEnemy extends Enemy {
         if (this.y > this.maxLength) this.vy *= -1
     }
 }
-

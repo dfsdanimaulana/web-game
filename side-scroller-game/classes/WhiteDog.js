@@ -19,10 +19,11 @@ import {
 } from './state.js'
 
 export default class WhiteDog extends Character {
-    constructor(gameWidth, gameHeight) {
+    constructor(gameWidth, gameHeight, groundMargin) {
         super(gameWidth, gameHeight)
         this.gameWidth = gameWidth
         this.gameHeight = gameHeight
+        this.groundMargin = groundMargin
         this.states = [
             new StandingLeft(this),
             new StandingRight(this),
@@ -44,12 +45,12 @@ export default class WhiteDog extends Character {
         this.currentState = this.states[1]
         this.spriteWidth = 200
         this.spriteHeight = 181.83
-        this.scale = 1
+        this.scale = 0.85
         this.width = this.spriteWidth * this.scale
         this.height = this.spriteHeight * this.scale
         this.image = document.getElementById('shadowDog')
         this.x = 50
-        this.y = this.gameHeight - this.height
+        this.y = this.gameHeight - this.height - this.groundMargin
         this.frameX = 0
         this.maxFrameX = 6
         this.frameY = 0
@@ -93,8 +94,8 @@ export default class WhiteDog extends Character {
             this.vy = 0
         }
         if (this.y <= 0) this.y = 0
-        if (this.y > this.gameHeight - this.height)
-            this.y = this.gameHeight - this.height
+        if (this.y > this.gameHeight - this.height - this.groundMargin)
+            this.y = this.gameHeight - this.height - this.groundMargin
     }
     setState(state) {
         this.currentState = this.states[state]
@@ -110,7 +111,7 @@ export default class WhiteDog extends Character {
         this.speedX = 0
     }
     onGround() {
-        return this.y >= this.gameHeight - this.height
+        return this.y >= this.gameHeight - this.height - this.groundMargin
     }
     draw(ctx, enemies) {
         function drawLine(x1, y1, x2, y2) {
