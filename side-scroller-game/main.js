@@ -127,12 +127,12 @@ window.addEventListener('load', function () {
       switch (chosenEnemy) {
         case 'ghost':
           enemies.push(
-            new Ghost(canvas.width, canvas.height, groundMargin)
+            new Ghost(canvas.width, canvas.height)
           )
           break
         case 'fly':
           enemies.push(
-            new Fly(canvas.width, canvas.height, groundMargin)
+            new Fly(canvas.width, canvas.height)
           )
           break
         case 'worm':
@@ -151,12 +151,12 @@ window.addEventListener('load', function () {
           break
         case 'spider':
           enemies.push(
-            new Spider(canvas.width, canvas.height, groundMargin)
+            new Spider(canvas.width, canvas.height)
           )
           break
         case 'bigSpider':
           enemies.push(
-            new BigSpider(canvas.width, canvas.height, groundMargin)
+            new BigSpider(canvas.width, canvas.height)
           )
           break
         case 'skeletonBom':
@@ -175,21 +175,21 @@ window.addEventListener('load', function () {
           break
         case 'bat':
           enemies.push(
-            new Bat(canvas.width, canvas.height, groundMargin)
+            new Bat(canvas.width, canvas.height)
           )
           break
         case 'blueDragon':
           enemies.push(
             new BlueDragon(
               canvas.width,
-              canvas.height,
-              groundMargin
+              canvas.height
+
             )
           )
           break
         case 'bee':
           enemies.push(
-            new Bee(canvas.width, canvas.height, groundMargin)
+            new Bee(canvas.width, canvas.height)
           )
           break
         case 'grassMonster':
@@ -262,7 +262,7 @@ window.addEventListener('load', function () {
       canvas.width,
       canvas.height)
     randomValue.map((layer) => {
-      layer.update(deltaTime)
+      layer.update(deltaTime, player.speed)
       layer.draw(ctx)
     })
     player.update(input.lastKey,

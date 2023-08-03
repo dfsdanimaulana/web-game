@@ -12,11 +12,11 @@ export default class Layer {
     this.speed = this.gameSpeed * this.speedModifier
   }
 
-  update(deltaTime) {
+  update(deltaTime, speed) {
     if (this.x <= -this.width) {
       this.x = 0
     }
-    this.x -= this.speed
+    this.x -= this.speed*speed
   }
   draw(ctx) {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height)

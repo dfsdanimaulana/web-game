@@ -54,6 +54,7 @@ export default class Player extends Character {
     this.frameX = 0
     this.maxFrameX = 6
     this.frameY = 0
+    this.speed = 1 // for background speed modifier 
     this.speedX = 0
     this.maxSpeedX = 10
     this.vy = 0

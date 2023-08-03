@@ -13,8 +13,8 @@ export default class Enemy extends Character {
   }
   update(deltaTime) {
     super.update(deltaTime)
-    this.x -= this.vx * deltaTime
     if (this.x < 0 - this.width) this.markedForDeletion = true
+    this.x -= this.vx * deltaTime
   }
 }
 
