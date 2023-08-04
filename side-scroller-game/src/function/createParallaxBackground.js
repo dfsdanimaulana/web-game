@@ -1,4 +1,4 @@
-import Layer from '../classes/Background.js'
+import Layer from '../classes/layer.js'
 
 const generateBackgroundLayer = (imageLayer, gameSpeed, groundMargin = 0) => {
   const backgroundLayer = []
