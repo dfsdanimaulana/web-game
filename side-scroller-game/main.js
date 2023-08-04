@@ -38,6 +38,21 @@ window.addEventListener('load', function () {
   canvas.width = 1600
   canvas.height = 720
 
+  class Game {
+    constructor(width, height) {
+      this.width = width
+      this.height = height
+      this.gameSpeed = 10
+      this.backgrounds = createParallaxBackground(this.gameSpeed)
+      this.background = randomBackground(this.backgrounds)
+      this.groundMargin = this.background[0].groundMargin
+      this.player = new Player(this.width, this.height, this.groundMargin)
+      this.input = new InputHandler()
+    }
+  }
+
+  const game = new Game(canvas.width, canvas.height)
+
   let devMode = false
   let enemies = []
   let explosions = []
