@@ -9,6 +9,16 @@ body {
     color: white;
 }
 
+#cp {
+  font-style: bold;
+  position: fixed;
+  font-size: 13px;
+  color: white;
+  bottom: 10px;
+  left: 10px;
+  z-index: 999;
+  
+}
 #loading {
     position: fixed;
     top: 50%;
