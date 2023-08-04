@@ -4,7 +4,7 @@ export class BlueDragon extends FlyingEnemy {
     constructor(gameWidth, gameHeight) {
         super(gameWidth, gameHeight)
         this.name = 'BlueDragon'
-        this.scale = Math.random()*0.6 + 0.6
+        this.scale = Math.random() * 0.6 + 0.6
         this.spriteWidth = 473
         this.spriteHeight = 468
         this.width = this.spriteWidth * this.scale
@@ -67,8 +67,8 @@ export class Raven extends FlyingEnemy {
         this.directionY = Math.random() * 5 - 2.5
         this.curve = 0
     }
-    update(deltaTime) {
-        super.update(deltaTime)
+    update(deltaTime, playerSpeed) {
+        super.update(deltaTime, playerSpeed)
         if (this.y < 0 || this.y > this.gameHeight - this.height) {
             this.directionY = this.directionY * -1
         }

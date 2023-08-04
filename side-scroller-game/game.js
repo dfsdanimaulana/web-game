@@ -17,13 +17,9 @@ import {
     BlueDragon,
     Fly
 } from './src/enemies/FlyingEnemy.js'
-import { Spider, BigSpider } from './src/enemies/ClimbEnemy.js'
-import {
-    SkeletonBom,
-    GrassMonster,
-    Worm,
-    PlantEnemy
-} from './src/enemies/GroundEnemy.js'
+import { Spider, BigSpider } from './src/enemies/ClimbingEnemy.js'
+import { SkeletonBom, GrassMonster, Worm } from './src/enemies/WalkingEnemy.js'
+import { PlantEnemy } from './src/enemies/GroundEnemy.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('canvas1')
@@ -35,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let enemies = []
     let explosions = []
     let score = 0
-    let gameSpeed = 10
+    let backgroundSpeed = 10
     let bestScore = 0
     let gameOver = false
     let enemyTimer = 0
@@ -46,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let groundMargin = 0
 
     const input = new InputHandler()
-    const backgrounds = createParallaxBackground(gameSpeed)
+    const backgrounds = createParallaxBackground(backgroundSpeed)
     const randomValue = randomBackground(backgrounds)
     groundMargin = randomValue[0].groundMargin
     const player = new Player(canvas.width, canvas.height, groundMargin)
@@ -135,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update and draw enemies
         enemies.forEach((enemy) => {
-            enemy.update(deltaTime)
+            enemy.update(deltaTime, player.speed)
             enemy.draw(ctx)
         })
 

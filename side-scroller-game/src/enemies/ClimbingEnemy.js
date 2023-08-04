@@ -1,6 +1,6 @@
-import { ClimbEnemy } from './Enemy.js'
+import { ClimbingEnemy } from './Enemy.js'
 
-export class Spider extends ClimbEnemy {
+export class Spider extends ClimbingEnemy {
     constructor(gameWidth, gameHeight) {
         super(gameWidth, gameHeight)
         this.name = 'Spider'
