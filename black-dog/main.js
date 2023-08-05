@@ -7,7 +7,6 @@ window.addEventListener('load', function () {
     canvas.height = 720
 
     const game = new Game(canvas.width, canvas.height)
-    console.log(game)
 
     let lastTime = 0
     function animate(timestamp) {
