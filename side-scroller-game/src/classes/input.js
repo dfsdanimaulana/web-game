@@ -27,6 +27,9 @@ export default class InputHandler2 {
       case 'Enter':
         this.lastKey = 'PRESS enter'
         break
+      case 'd':
+        this.lastKey = 'PRESS d'
+        break
       default:
         break
       }

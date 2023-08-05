@@ -1,5 +1,5 @@
 // Character class
-export default class Character {
+export default class Animation {
   constructor(gameWidth, gameHeight) {
     this.gameWidth = gameWidth
     this.gameHeight = gameHeight
