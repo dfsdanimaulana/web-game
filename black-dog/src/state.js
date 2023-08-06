@@ -74,7 +74,7 @@ export class Jumping extends State {
     handleInput(input) {
         if (this.game.player.vy > this.game.player.weight) {
             this.game.player.setState(states.FALLING, 1)
-        } else if (input.includes('Enter')) {
+        } else if (input.includes('Enter') || input.includes('ArrowLeft')) {
             this.game.player.setState(states.ROLLING, 2)
         } else if (input.includes('ArrowDown')) {
             this.game.player.setState(states.DIVING, 0)
@@ -125,7 +125,7 @@ export class Rolling extends State {
             this.game.player.onGround()
         ) {
             this.game.player.vy -= 27
-        } else if (input.includes('ArrowDown')) {
+        } else if (input.includes('ArrowDown') && !this.game.player.onGround()) {
             this.game.player.setState(states.DIVING, 0)
         }
     }

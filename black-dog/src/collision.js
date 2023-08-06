@@ -8,7 +8,7 @@ export default class Collision {
         this.width = this.spriteWidth * this.sizeModifier
         this.height = this.spriteHeight * this.sizeModifier
         this.x = x - this.width * 0.5
-        this.y = y - this.width * 0.5
+        this.y = y - this.height * 0.5
         this.frameX = 0
         this.maxFrameX = 4
         this.markedForDeletion = false
