@@ -9,7 +9,6 @@ export default class InputHandler {
         this.previousSwipeDirection = ''
 
         window.addEventListener('keydown', (e) => {
-            console.log(e.key)
             if (
                 (e.key === 'ArrowLeft' ||
                     e.key === 'ArrowRight' ||

@@ -6,6 +6,8 @@ window.addEventListener('load', function () {
     canvas.width = 1400
     canvas.height = 720
 
+    let gameOver = false
+
     const game = new Game(canvas.width, canvas.height)
 
     let lastTime = 0
@@ -16,7 +18,8 @@ window.addEventListener('load', function () {
         game.draw(ctx)
         game.update(deltaTime)
 
-        requestAnimationFrame(animate)
+        if (!gameOver) requestAnimationFrame(animate)
+        if (game.gameOver) gameOver = true
     }
     animate(0)
 })
