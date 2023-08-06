@@ -1,5 +1,6 @@
 export default class InputHandler {
     constructor(game) {
+        this.game = game
         this.keys = []
         this.swipeStartX = 0
         this.swipeStartY = 0
@@ -8,32 +9,19 @@ export default class InputHandler {
         this.previousSwipeDirection = ''
 
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' && this.keys.indexOf(e.key) === -1) {
+            console.log(e.key)
+            if (
+                (e.key === 'ArrowLeft' ||
+                    e.key === 'ArrowRight' ||
+                    e.key === 'ArrowUp' ||
+                    e.key === 'ArrowDown' ||
+                    e.key === 'Enter' ||
+                    e.key === 'Space') &&
+                this.keys.indexOf(e.key) === -1
+            ) {
                 this.keys.push(e.key)
-            }
-
-            if (e.key === 'ArrowRight' && this.keys.indexOf(e.key) === -1) {
-                this.keys.push(e.key)
-            }
-
-            if (e.key === 'ArrowUp' && this.keys.indexOf(e.key) === -1) {
-                this.keys.push(e.key)
-            }
-
-            if (e.key === 'ArrowDown' && this.keys.indexOf(e.key) === -1) {
-                this.keys.push(e.key)
-            }
-
-            if (e.key === 'Space' && this.keys.indexOf(e.key) === -1) {
-                this.keys.push(e.key)
-            }
-
-            if (e.key === 'Enter' && this.keys.indexOf(e.key) === -1) {
-                this.keys.push(e.key)
-            }
-
-            if (e.key === 'd' && this.keys.indexOf(e.key) === -1) {
-                this.keys.push(e.key)
+            } else if (e.key === 'd') {
+                this.game.stroke = !this.game.stroke
             }
         })
         window.addEventListener('keyup', (e) => {
@@ -58,6 +46,9 @@ export default class InputHandler {
             }
 
             if (e.key === 'Enter') {
+                this.keys.splice(this.keys.indexOf(e.key), 1)
+            }
+            if (e.key === 'Space') {
                 this.keys.splice(this.keys.indexOf(e.key), 1)
             }
 

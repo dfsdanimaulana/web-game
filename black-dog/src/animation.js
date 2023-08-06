@@ -1,14 +1,10 @@
 // Character class
 export default class Animation {
-    constructor() {
+    constructor(game) {
+        this.game = game
         this.fps = 20
         this.frameTimer = 0
         this.frameInterval = 1000 / this.fps
-        this.stroke = false
-    }
-
-    toggleStroke() {
-        this.stroke = !this.stroke
     }
 
     update(deltaTime) {
@@ -34,7 +30,7 @@ export default class Animation {
             this.width,
             this.height
         )
-        if (this.stroke) {
+        if (this.game.stroke) {
             ctx.save()
             // Set the stroke style and width
             ctx.strokeStyle = 'yellow'
