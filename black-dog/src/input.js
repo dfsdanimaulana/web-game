@@ -9,7 +9,8 @@ export default class InputHandler {
     this.previousSwipeDirection = ''
     this.touchStartTime = 0
     this.touchEndTime = 0
-    this.screenHold = false
+    this.holdTimer = 0
+    this.holdThreshold = 500
 
     window.addEventListener('keydown', (e) => {
       if (
@@ -26,7 +27,7 @@ export default class InputHandler {
         this.game.stroke = !this.game.stroke
       }
     })
-    
+
     window.addEventListener('keyup',
       (e) => {
         if (e.key === 'ArrowLeft') {
@@ -79,32 +80,30 @@ export default class InputHandler {
       (e) => {
         this.getReleasedSwipeDirection()
         this.onTouchEnd()
-        this.screenHold = false
       })
+  }
+
+  enterState() {
+    this.keys.indexOf('Enter') === -1 && this.keys.push('Enter')
+    this.previousSwipeDirection = 'enter'
   }
 
   onTouchStart() {
     this.touchStartTime = new Date().getTime();
-    this.screenHold = true
+    this.holdTimer = setTimeout(()=> this.enterState(),
+      this.holdThreshold)
   }
 
   onTouchEnd() {
     this.touchEndTime = new Date().getTime();
     const touchDuration = this.touchEndTime - this.touchStartTime;
 
-    // Define the duration threshold for a long touch (in milliseconds)
-    const longTouchThreshold = 1000;
-
-    if (touchDuration >= longTouchThreshold) {
+    clearTimeout(this.holdTimer)
+    
+    if (touchDuration >= this.holdThreshold) {
       // The user has touched and held the screen for a long time
       // Add your desired action here
-      this.keys.indexOf('Enter') === -1 &&
-      this.keys.push('Enter')
-      this.previousSwipeDirection = 'enter'
-      console.log('hold')
     } else {
-      this.screenHold = false
-      console.log('touch')
       // The user's touch was not long enough
       // Add your desired action for a regular touch here
     }
@@ -151,6 +150,9 @@ export default class InputHandler {
       break
     case 'left':
       this.keys.splice(this.keys.indexOf('ArrowLeft'), 1)
+      break
+    case 'enter':
+      this.keys.splice(this.keys.indexOf('Enter'), 1)
       break
     default:
       this.keys.splice(this.keys.indexOf('Enter'), 1)
