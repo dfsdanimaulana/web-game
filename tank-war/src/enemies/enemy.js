@@ -1,5 +1,6 @@
-import { EnemyBullet } from "../bullet.js";
+import { NormalEnemyBullet, MovingEnemyBullet } from "../bullet.js";
 import Animation from "../animation.js";
+
 import {
   EnemyRedWeapon1_1,
   EnemyRedWeapon1_2,
@@ -18,7 +19,6 @@ export default class Enemy extends Animation {
     this.scale = this.game.scale;
     this.spriteWidth = 128;
     this.spriteHeight = 128;
-    this.degree = 0;
     this.frameX = 0;
     this.frameY = 0;
     this.maxFrame = 1;
@@ -30,10 +30,12 @@ export default class Enemy extends Animation {
     this.speedX = 0;
     this.speedY = 0;
     this.markedForDeletion = false;
-    this.projectiles = [];
+
     this.drew = false;
     this.degree = 0;
     this.direction = "up";
+
+    this.liveBarColor = "red";
 
     this.weapons = [
       new EnemyRedWeapon1_1(this),
@@ -49,14 +51,44 @@ export default class Enemy extends Animation {
     this.maxWeaponLevel = this.weapons.length;
     this.weapon = this.weapons[this.weaponLevel];
 
+    this.projectilesPool = [];
+    this.numberOfProjectiles = 1;
+    this.createProjectiles();
+
     this.directionTimer = 0;
     this.changeDirectionInterval = Math.random() * 1000 + 2000;
   }
+  // create projectile object poll
+  createProjectiles() {
+    for (let i = 0; i < this.numberOfProjectiles; i++) {
+      if (this.weapon.type === "NormalWeapon") {
+        this.projectilesPool.push(new NormalEnemyBullet(this.game));
+      } else if (this.weapon.type === "MovingWeapon") {
+        this.projectilesPool.push(new MovingEnemyBullet(this.game));
+      }
+    }
+  }
 
+  // get free projectile object from the pool
+  getProjectile() {
+    for (let i = 0; i < this.projectilesPool.length; i++) {
+      if (this.projectilesPool[i].free) return this.projectilesPool[i];
+    }
+  }
+  shoot() {
+    this.weapon.active = true;
+    const projectile = this.getProjectile();
+    if (projectile) {
+      projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
+    }
+  }
   update(deltaTime) {
     super.update(deltaTime);
 
+    // weapon animation
     this.weapon.update(deltaTime);
+
+    this.projectilesPool.forEach((projectile) => projectile.update(this));
 
     if (this.directionTimer > this.changeDirectionInterval || !this.drew) {
       const random = Math.random();
@@ -88,27 +120,21 @@ export default class Enemy extends Animation {
           this.degree = 90;
           break;
       }
-
+      this.shoot();
       this.directionTimer = 0;
     } else {
       this.directionTimer += deltaTime;
     }
 
-    // Check collision enemy - projectile
-    this.game.projectilesPool.forEach((projectile) => {
-      if (
-        !projectile.free &&
-        this.game.checkCircleCollision(this, projectile)
-      ) {
-        this.markedForDeletion = true;
-        projectile.reset();
-        this.game.score++;
-      }
-    });
+    if (this.lives < 1) {
+      this.game.createExplosion(this.x, this.y, this.width);
+      this.markedForDeletion = true;
+      this.game.score++;
+    }
 
     // Check collision enemy - walls
     this.game.walls.forEach((wall) => {
-      if (this.game.checkCollision(this, wall)) {
+      if (this.game.checkCircleCollision(this, wall)) {
         this.speedX *= -1;
         this.speedY *= -1;
       }
@@ -126,7 +152,7 @@ export default class Enemy extends Animation {
 
     // Check collision enemy - player
     if (this.game.checkCircleCollision(this, this.game.player)) {
-      this.markedForDeletion = true;
+      this.lives--;
       if (this.game.player.shield) {
         this.game.player.shield = false;
       } else {
@@ -152,6 +178,8 @@ export default class Enemy extends Animation {
     this.y += this.speedY * this.maxSpeed;
   }
   draw(ctx) {
+    this.projectilesPool.forEach((projectile) => projectile.draw(ctx));
+
     if (!this.drew) {
       // Prevent enemies for overlapping with each other when spawn
       this.game.enemies.forEach((enemy) => {

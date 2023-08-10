@@ -3,7 +3,6 @@ export default class Animation {
     this.fps = 20;
     this.frameTimer = 0;
     this.frameInterval = 1000 / this.fps;
-    
   }
 
   update(deltaTime) {
@@ -62,6 +61,33 @@ export default class Animation {
       this.width,
       this.height
     );
+    ctx.restore();
+    // draw lives
+    ctx.save();
+    ctx.fillStyle = this.liveBarColor;
+    ctx.strokeStyle = this.liveBarColor;
+
+    const width = 15;
+    const height = 7;
+    const gap = 5;
+    const totalWidth = this.maxLives * (gap + width);
+    const centeredPosition = this.width * 0.5 - totalWidth * 0.5;
+    for (let i = 0; i < this.maxLives; i++) {
+      ctx.strokeRect(
+        this.x + i * (width + gap) + centeredPosition,
+        this.y,
+        width,
+        height
+      );
+    }
+    for (let i = 0; i < this.lives; i++) {
+      ctx.fillRect(
+        this.x + i * (width + gap) + centeredPosition,
+        this.y,
+        width,
+        height
+      );
+    }
     ctx.restore();
   }
 }

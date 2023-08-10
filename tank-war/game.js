@@ -1,8 +1,10 @@
 import { LiveBonus, ShieldBonus, UpgradeWeaponBonus } from "./src/bonus.js";
-import { RedEnemy, NavyEnemy, WeaponEnemy } from "./src/enemies/enemyRed.js";
+import { RedEnemy, NavyEnemy, WeaponEnemy } from "./src/enemies/enemies.js";
 import { PlayerBullet } from "./src/bullet.js";
 import InputHandler from "./src/input.js";
+import Collision from "./src/collision.js";
 import Player from "./src/player.js";
+import Map1 from "./src/terrains/map1.js";
 import Wall from "./src/wall.js";
 import UI from "./src/UI.js";
 
@@ -10,17 +12,21 @@ export default class Game {
   constructor(width, height) {
     this.width = width;
     this.height = height;
-    this.scale = 0.75;
+    this.scale = 1;
     this.player = new Player(this);
     this.input = new InputHandler(this);
     this.UI = new UI(this);
 
+    this.terrains = new Map1();
+    
     this.enemies = [];
     this.maxEnemies = 3;
 
     this.projectilesPool = [];
     this.numberOfProjectiles = 1;
     this.createProjectiles();
+
+    this.collisions = [];
 
     this.walls = [];
     this.maxWalls = 5;
@@ -35,9 +41,9 @@ export default class Game {
 
     this.bonuses = [];
     this.bonusTimer = 0;
-    this.bonusInterval = 5000; // in ms
+    this.bonusInterval = 15000; // in ms
     this.bonusExpiredTimer = 0;
-    this.bonusExpiredInterval = 5000;
+    this.bonusExpiredInterval = 10000;
 
     this.stroke = false;
   }
@@ -45,6 +51,7 @@ export default class Game {
     this.maxEnemies = 3;
     this.enemies = [];
     this.player.restart();
+    this.createWall();
   }
   update(deltaTime) {
     // Sprite timing
@@ -78,6 +85,7 @@ export default class Game {
 
     // Summon enemy when enemies array is empty
     if (this.enemies.length < 1) {
+      this.createWall();
       for (let i = 0; i < this.maxEnemies; i++) {
         this.addEnemy();
       }
@@ -99,10 +107,17 @@ export default class Game {
     this.enemies.forEach((enemy) => {
       enemy.update(deltaTime);
     });
+    this.collisions.forEach((collision) => {
+      collision.update(deltaTime);
+    });
+    this.collisions = this.collisions.filter(
+      (collision) => !collision.markedForDeletion
+    );
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
     this.bonuses = this.bonuses.filter((bonus) => !bonus.markedForDeletion);
   }
   draw(ctx) {
+    this.terrains.draw(ctx);
     this.projectilesPool.forEach((projectile) => {
       projectile.draw(ctx);
     });
@@ -116,8 +131,16 @@ export default class Game {
       bonus.draw(ctx);
     });
     this.player.draw(ctx);
+    this.collisions.forEach((collision) => {
+      collision.draw(ctx);
+    });
     this.UI.draw(ctx);
   }
+
+  createExplosion(x, y, size) {
+    this.collisions.push(new Collision(x, y, size));
+  }
+
   // create projectile object poll
   createProjectiles() {
     for (let i = 0; i < this.numberOfProjectiles; i++) {
@@ -184,6 +207,7 @@ export default class Game {
 
   // Create random walls
   createWall() {
+    this.walls = [];
     for (let i = 0; i < this.maxWalls; i++) {
       this.walls.push(new Wall(this));
     }

@@ -12,9 +12,10 @@ class EnemyWeapon extends Weapon {
     this.width = this.spriteWidth * this.enemy.scale;
     this.height = this.spriteHeight * this.enemy.scale;
     this.degree = Math.random() * 360;
+    this.initialDegree = this.degree;
     this.degreeModifier = 0;
     this.maxDegreeModifier = 10;
-    this.parentDegreeModifier = 1
+    this.parentDegreeModifier = 1;
     this.fps = 5;
     this.timer = 0;
     this.timerInterval = 1000 / this.fps;
@@ -26,7 +27,12 @@ class EnemyWeapon extends Weapon {
       this.enemy.x + this.width * 0.5,
       this.enemy.y + this.height * 0.5
     );
-    ctx.rotate(((this.enemy.degree*this.parentDegreeModifier + this.degree * this.degreeModifier) * Math.PI) / 180);
+    ctx.rotate(
+      ((this.enemy.degree * this.parentDegreeModifier +
+        this.degree * this.degreeModifier) *
+        Math.PI) /
+        180
+    );
     ctx.drawImage(
       this.image,
       this.frameX * this.spriteWidth,
@@ -45,23 +51,27 @@ class EnemyWeapon extends Weapon {
 export class NormalWeapon extends EnemyWeapon {
   constructor(enemy) {
     super(enemy);
+    this.type = "NormalWeapon";
   }
 }
 
 export class MovingWeapon extends EnemyWeapon {
   constructor(enemy) {
     super(enemy);
+    this.type = "MovingWeapon";
     this.degreeModifier = 1;
-    this.maxDegreeModifier = 10;
-    this.parentDegreeModifier = 0
+    this.rotateSpeed = Math.random() * 0.02 + 0.01;
+    this.parentDegreeModifier = 0;
   }
 
   update(deltaTime) {
     if (this.timer > this.timerInterval) {
-      if (this.degreeModifier > this.maxDegreeModifier) {
+      const currentDegree = this.degreeModifier * this.degree;
+      if (currentDegree > 360 + this.degree) {
+        this.degree = this.initialDegree
         this.degreeModifier = 1;
       } else {
-        this.degreeModifier += 0.01;
+        this.degreeModifier += this.rotateSpeed;
       }
       this.timer = 0;
     } else {
