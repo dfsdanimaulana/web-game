@@ -133,7 +133,7 @@ export default class Player extends Animation {
             ctx.save()
             ctx.strokeStyle = 'green'
             ctx.lineWidth = 2
-            const radius = this.width
+            const radius = this.width*0.75
             ctx.beginPath()
             ctx.arc(
                 this.x + this.width / 2,
