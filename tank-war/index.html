@@ -1,16 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Tank war</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="main.js" type="module" defer></script>
-  </head>
-  <body>
-    <canvas id="container"></canvas>
-    <img id="playerBodyBlue" src="img/player/body/body_halftrack.png" alt="body blue" />
-    <img id="playerWeaponBlue1" src="img/player/weapon/turret_01_mk1.png" alt="weapon blue" />
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Tank war</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="main.js" type="module" defer></script>
+    </head>
+    <body>
+        <canvas id="container"></canvas>
+        <div class="player">
+            <img
+                id="playerBodyBlue"
+                src="img/player/body/body_halftrack.png"
+                alt="body blue"
+            />
+            <div class="weapon 1">
+                <img
+                    id="playerWeaponBlue1_1"
+                    src="img/player/weapon/turret_01_mk1.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="playerWeaponBlue1_2"
+                    src="img/player/weapon/turret_01_mk2.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="playerWeaponBlue1_3"
+                    src="img/player/weapon/turret_01_mk3.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="playerWeaponBlue1_4"
+                    src="img/player/weapon/turret_01_mk4.png"
+                    alt="weapon blue"
+                />
+            </div>
+            <div class="weapon 2">
+                <img
+                    id="playerWeaponBlue2_1"
+                    src="img/player/weapon/turret_02_mk1.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="playerWeaponBlue2_2"
+                    src="img/player/weapon/turret_02_mk2.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="playerWeaponBlue2_3"
+                    src="img/player/weapon/turret_02_mk3.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="playerWeaponBlue2_4"
+                    src="img/player/weapon/turret_02_mk4.png"
+                    alt="weapon blue"
+                />
+            </div>
+        </div>
+        <div class="enemies">
+            <img id="enemyBodyRed" src="img/enemy/body/body_red.png" alt="enemy red">
+            <img id="enemyBodyPurple" src="img/enemy/body/body_purple.png" alt="enemy blue">
+            <div class="weapon">
+                <div class="red">
+                     <div class="weapon 1">
+                <img
+                    id="enemyWeaponRed1_1"
+                    src="img/enemy/weapon/red/turret_01_mk1.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="enemyWeaponRed1_2"
+                    src="img/enemy/weapon/red/turret_01_mk2.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="enemyWeaponRed1_3"
+                    src="img/enemy/weapon/red/turret_01_mk3.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="enemyWeaponRed1_4"
+                    src="img/enemy/weapon/red/turret_01_mk4.png"
+                    alt="weapon blue"
+                />
+            </div>
+            <div class="weapon 2">
+                <img
+                    id="enemyWeaponRed2_1"
+                    src="img/enemy/weapon/red/turret_02_mk1.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="enemyWeaponRed2_2"
+                    src="img/enemy/weapon/red/turret_02_mk2.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="enemyWeaponRed2_3"
+                    src="img/enemy/weapon/red/turret_02_mk3.png"
+                    alt="weapon blue"
+                />
+                <img
+                    id="enemyWeaponRed2_4"
+                    src="img/enemy/weapon/red/turret_02_mk4.png"
+                    alt="weapon blue"
+                />
+            </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
