@@ -6,7 +6,7 @@ export default class Player extends Animation {
     super();
     this.game = game;
     this.image = playerBodyBlue;
-    this.scale = 1;
+    this.scale = this.game.scale;
     this.spriteWidth = 128;
     this.spriteHeight = 128;
     this.degree = 0;

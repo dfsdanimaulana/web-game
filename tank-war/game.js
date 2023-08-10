@@ -10,6 +10,7 @@ export default class Game {
   constructor(width, height) {
     this.width = width;
     this.height = height;
+    this.scale = 1
     this.player = new Player(this);
     this.input = new InputHandler(this);
     this.UI = new UI(this);
@@ -40,6 +41,7 @@ export default class Game {
     this.bonusExpiredInterval = 5000;
     
     this.stroke = true
+    
   }
   restart() {
     this.maxEnemies = 3;
