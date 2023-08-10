@@ -1,7 +1,9 @@
 import { EnemyBullet } from "./bullet.js";
+import Animation from "./animation.js";
 
 class Enemy {
   constructor(game) {
+   // super();
     this.game = game;
     this.width = 25;
     this.height = 25;
@@ -13,7 +15,8 @@ class Enemy {
     this.projectiles = [];
     this.drew = false;
   }
-  update() {
+  update(deltaTime) {
+    // super.update(deltaTime);
     // Check collision enemy - projectile
     this.game.projectilesPool.forEach((projectile) => {
       if (!projectile.free && this.game.checkCollision(this, projectile)) {
@@ -105,30 +108,6 @@ export class WeaponEnemy extends Enemy {
   constructor(game) {
     super(game);
     this.color = "gold";
-    this.numberOfProjectile = 1;
-    this.projectilesPool = [];
-    this.createProjectiles();
-  }
-  update() {
-    super.update();
-  }
-  // create projectile object poll
-  createProjectiles() {
-    for (let i = 0; i < this.numberOfProjectiles; i++) {
-      this.projectilesPool.push(new EnemyBullet(this.game));
-    }
-  }
-
-  // get free projectile object from the pool
-  getProjectile() {
-    for (let i = 0; i < this.projectilesPool.length; i++) {
-      if (this.projectilesPool[i].free) return this.projectilesPool[i];
-    }
-  }
-  shoot() {
-    const projectile = this.getProjectile();
-    if (projectile)
-      projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
   }
 }
 

@@ -1,5 +1,5 @@
 import Player from "./player.js";
-import { RedEnemy, NavyEnemy } from "./enemy.js";
+import { RedEnemy, NavyEnemy, WeaponEnemy } from "./enemy.js";
 import InputHandler from "./input.js";
 import Wall from "./wall.js";
 import { PlayerBullet } from "./bullet.js";
@@ -35,9 +35,11 @@ export default class Game {
 
     this.bonuses = [];
     this.bonusTimer = 0;
-    this.bonusInterval = 5000; // in ms
+    this.bonusInterval = 15000; // in ms
     this.bonusExpiredTimer = 0;
     this.bonusExpiredInterval = 5000;
+    
+    this.stroke = true
   }
   restart() {
     this.maxEnemies = 3;
@@ -91,16 +93,16 @@ export default class Game {
     if (this.input.keys.includes("Enter") && !this.fired) this.player.shoot();
 
     this.projectilesPool.forEach((projectile) => {
-      projectile.update();
+      projectile.update(deltaTime);
     });
     this.bonuses.forEach((bonus) => {
-      bonus.update();
+      bonus.update(deltaTime);
     });
 
-    this.player.update();
+    this.player.update(deltaTime);
 
     this.enemies.forEach((enemy) => {
-      enemy.update();
+      enemy.update(deltaTime);
     });
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
     this.bonuses = this.bonuses.filter((bonus) => !bonus.markedForDeletion);
@@ -134,14 +136,18 @@ export default class Game {
       if (this.projectilesPool[i].free) return this.projectilesPool[i];
     }
   }
-  
+
   addEnemy() {
-    if (Math.random() > 0.5) {
+    const randomNumber = Math.random();
+    if (randomNumber < 0.33) {
       this.enemies.push(new RedEnemy(this));
-    } else {
+    } else if (randomNumber < 0.66) {
       this.enemies.push(new NavyEnemy(this));
+    } else {
+      this.enemies.push(new WeaponEnemy(this));
     }
   }
+
   // collision detection between two rectangle
   checkCollision(a, b) {
     return (

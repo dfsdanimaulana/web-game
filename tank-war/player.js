@@ -1,18 +1,31 @@
-export default class Player {
+import Animation from "./animation.js";
+import Weapon from "./weapon.js";
+
+export default class Player extends Animation {
   constructor(game) {
+    super();
     this.game = game;
-    this.width = 25;
-    this.height = 25;
+    this.image = playerBodyBlue;
+    this.scale = 1;
+    this.spriteWidth = 128;
+    this.spriteHeight = 128;
+    this.degree = 0;
+    this.frameX = 0;
+    this.frameY = 0;
+    this.maxFrame = 1;
+    this.width = this.spriteWidth * this.scale;
+    this.height = this.spriteHeight * this.scale;
     this.x = this.game.width * 0.5 - this.width * 0.5;
     this.y = this.game.height * 0.5 - this.height * 0.5;
+    this.weapons = [new Weapon(this)];
+    this.weapon = this.weapons[0];
     this.speedX = 0;
     this.speedY = 0;
     this.maxSpeed = 5;
     this.direction = "up";
-    this.lives = 10;
+    this.lives = 5;
     this.maxLives = 10;
     this.shield = false;
-    this.hitWall = false;
   }
   restart() {
     this.x = this.game.width * 0.5 - this.width * 0.5;
@@ -22,15 +35,20 @@ export default class Player {
     this.direction = "up";
     this.lives = 10;
   }
-  update() {
-    // Horizontal movement
+  update(deltaTime) {
+    super.update(deltaTime);
+    // Weapon animation
+    this.weapon.update(deltaTime);
 
+    // Horizontal movement
     if (this.game.input.keys.includes("ArrowRight")) {
       this.speedX = this.maxSpeed;
       this.direction = "right";
+      this.degree = 90;
     } else if (this.game.input.keys.includes("ArrowLeft")) {
       this.speedX = -this.maxSpeed;
       this.direction = "left";
+      this.degree = 270;
     } else {
       this.speedX = 0;
     }
@@ -40,9 +58,11 @@ export default class Player {
     if (this.game.input.keys.includes("ArrowDown")) {
       this.speedY = this.maxSpeed;
       this.direction = "down";
+      this.degree = 180;
     } else if (this.game.input.keys.includes("ArrowUp")) {
       this.speedY = -this.maxSpeed;
       this.direction = "up";
+      this.degree = 0;
     } else {
       this.speedY = 0;
     }
@@ -102,15 +122,14 @@ export default class Player {
       ctx.stroke();
       ctx.restore();
     }
-
-    ctx.save();
-    ctx.fillStyle = "blue";
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-    ctx.restore();
+    super.draw(ctx);
+    this.weapon.draw(ctx);
   }
   shoot() {
+    this.weapon.active = true;
     const projectile = this.game.getProjectile();
-    if (projectile)
+    if (projectile) {
       projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
+    }
   }
 }
