@@ -5,7 +5,6 @@ import InputHandler from "./src/input.js";
 import Collision from "./src/collision.js";
 import Player from "./src/player.js";
 import Map1 from "./src/terrains/maps.js";
-import Wall from "./src/wall.js";
 import UI from "./src/UI.js";
 
 export default class Game {
@@ -28,10 +27,6 @@ export default class Game {
 
     this.collisions = [];
 
-    this.walls = [];
-    this.maxWalls = 5;
-    this.createWall();
-
     this.score = 0;
     this.gameOver = false;
 
@@ -51,7 +46,6 @@ export default class Game {
     this.maxEnemies = 3;
     this.enemies = [];
     this.player.restart();
-    this.createWall();
   }
   update(deltaTime) {
     // Sprite timing
@@ -85,7 +79,6 @@ export default class Game {
 
     // Summon enemy when enemies array is empty
     if (this.enemies.length < 1) {
-      this.createWall();
       for (let i = 0; i < this.maxEnemies; i++) {
         this.addEnemy();
       }
@@ -125,9 +118,6 @@ export default class Game {
     });
     this.enemies.forEach((enemy) => {
       enemy.draw(ctx);
-    });
-    this.walls.forEach((wall) => {
-      wall.draw(ctx);
     });
     this.bonuses.forEach((bonus) => {
       bonus.draw(ctx);
@@ -204,14 +194,6 @@ export default class Game {
       this.bonuses.push(new ShieldBonus(this));
     } else {
       this.bonuses.push(new UpgradeWeaponBonus(this));
-    }
-  }
-
-  // Create random walls
-  createWall() {
-    this.walls = [];
-    for (let i = 0; i < this.maxWalls; i++) {
-      this.walls.push(new Wall(this));
     }
   }
 }

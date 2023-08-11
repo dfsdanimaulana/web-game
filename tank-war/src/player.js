@@ -58,7 +58,6 @@ export default class Player extends Animation {
   update(deltaTime) {
     super.update(deltaTime);
 
-    
     // upgrade weapon
     this.weapon = this.weapons[this.weaponLevel];
 
@@ -79,7 +78,6 @@ export default class Player extends Animation {
     }
 
     // Vertical movement
-
     if (this.game.input.keys.includes("ArrowDown")) {
       this.speedY = this.maxSpeed;
       this.direction = "down";
@@ -93,6 +91,7 @@ export default class Player extends Animation {
     }
 
     // Check collision player - walls
+    /*
     this.game.walls.forEach((wall) => {
       const pX = this.x;
       const pY = this.y;
@@ -118,6 +117,7 @@ export default class Player extends Animation {
         }
       }
     });
+    */
 
     // Prevent off screen
     if (this.x < 0) this.x = 0;
@@ -128,6 +128,13 @@ export default class Player extends Animation {
       this.y = this.game.height - this.height;
     this.x += this.speedX;
     this.y += this.speedY;
+  }
+  shoot() {
+    this.weapon.active = true;
+    const projectile = this.game.getProjectile();
+    if (projectile) {
+      projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
+    }
   }
   draw(ctx) {
     if (this.shield) {
@@ -149,12 +156,5 @@ export default class Player extends Animation {
     }
     super.draw(ctx);
     this.weapon.draw(ctx);
-  }
-  shoot() {
-    this.weapon.active = true;
-    const projectile = this.game.getProjectile();
-    if (projectile) {
-      projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
-    }
   }
 }

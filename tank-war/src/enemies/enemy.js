@@ -1,4 +1,7 @@
-import { NormalEnemyProjectile, MovingEnemyProjectile } from "../projectile/projectile.js";
+import {
+  NormalEnemyProjectile,
+  MovingEnemyProjectile,
+} from "../projectile/projectile.js";
 import Animation from "../animation.js";
 
 import {
@@ -132,14 +135,6 @@ export default class Enemy extends Animation {
       this.game.score++;
     }
 
-    // Check collision enemy - walls
-    this.game.walls.forEach((wall) => {
-      if (this.game.checkCircleCollision(this, wall)) {
-        this.speedX *= -1;
-        this.speedY *= -1;
-      }
-    });
-
     // Check collision enemy - enemy
     this.game.enemies.forEach((enemy) => {
       if (this.x !== enemy.x && this.y !== enemy.y) {
@@ -188,14 +183,6 @@ export default class Enemy extends Animation {
             this.x = Math.random() * (this.game.width - this.width);
             this.y = Math.random() * (this.game.height - this.height);
           }
-        }
-      });
-
-      // Prevent enemy for overlapping with the wall
-      this.game.walls.forEach((wall) => {
-        if (this.game.checkCollision(this, wall)) {
-          this.x = Math.random() * (this.game.width - this.width);
-          this.y = Math.random() * (this.game.height - this.height);
         }
       });
 

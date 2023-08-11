@@ -23,13 +23,7 @@ class Bonus {
                 this.x = Math.random() * (this.game.width - this.width)
                 this.y = Math.random() * (this.game.height - this.height)
             }
-            this.game.walls.forEach((wall) => {
-                if (this.game.checkCollision(this, wall)) {
-                    this.x = Math.random() * (this.game.width - this.width)
-                    this.y = Math.random() * (this.game.height - this.height)
-                }
-            })
-            this.drew = true
+               this.drew = true
         }
         ctx.save()
         ctx.fillStyle = this.color

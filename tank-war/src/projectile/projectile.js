@@ -12,11 +12,7 @@ class Projectile {
     this.onAir = false;
   }
   update() {
-    this.game.walls.forEach((wall) => {
-      if (this.game.checkCollision(this, wall)) {
-        this.reset();
-      }
-    });
+    
     if (
       this.y < -this.height ||
       this.y > this.game.height ||
