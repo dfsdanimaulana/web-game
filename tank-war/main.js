@@ -5,7 +5,7 @@ window.addEventListener('load', function () {
     const ctx = canvas.getContext('2d')
     canvas.width = 1280
     canvas.height = 1280
-  ctx.font = '20px Impact'
+  
     const game = new Game(canvas.width, canvas.height)
 
     let lastTime = 0

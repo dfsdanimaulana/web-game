@@ -1,8 +1,8 @@
 class Bonus {
     constructor(game) {
         this.game = game
-        this.width = 10
-        this.height = 10
+        this.width = 30
+        this.height = 30
         this.x = Math.random() * (this.game.width - this.width)
         this.y = Math.random() * (this.game.height - this.height)
         this.markedForDeletion = false

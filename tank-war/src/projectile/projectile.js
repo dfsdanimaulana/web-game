@@ -1,4 +1,4 @@
-class Bullet {
+class Projectile {
   constructor(game) {
     this.game = game;
     this.width = 10;
@@ -49,7 +49,7 @@ class Bullet {
   }
 }
 
-export class PlayerBullet extends Bullet {
+export class PlayerProjectile extends Projectile {
   constructor(game) {
     super(game);
     this.color = "gold";
@@ -89,7 +89,7 @@ export class PlayerBullet extends Bullet {
   }
 }
 
-class EnemyBullet extends Bullet {
+class EnemyProjectile extends Projectile {
   constructor(game) {
     super(game);
   }
@@ -97,13 +97,17 @@ class EnemyBullet extends Bullet {
     super.update();
     // Check collision player - projectile
     if (!this.free && this.game.checkCollision(this, this.game.player)) {
-      this.game.player.lives--;
+      if (this.game.player.shield) {
+        this.game.player.shield = false;
+      } else {
+        this.game.player.lives--;
+      }
       this.reset();
     }
   }
 }
 
-export class NormalEnemyBullet extends EnemyBullet {
+export class NormalEnemyProjectile extends EnemyProjectile {
   constructor(game) {
     super(game);
     this.color = "red";
@@ -135,7 +139,7 @@ export class NormalEnemyBullet extends EnemyBullet {
   }
 }
 
-export class MovingEnemyBullet extends EnemyBullet {
+export class MovingEnemyProjectile extends EnemyProjectile {
   constructor(game) {
     super(game);
     this.color = "red";
@@ -147,17 +151,37 @@ export class MovingEnemyBullet extends EnemyBullet {
         const totalDegree = enemy.weapon.degreeModifier * enemy.weapon.degree;
         const degree = totalDegree >= 360 ? totalDegree - 360 : totalDegree;
 
-        if (degree > 45 && degree < 135) {
+        if (degree >= 22.5 && degree < 67.5) {
+          // "up-right"
+          this.speedX = this.maxSpeed;
+          this.speedY = -this.maxSpeed;
+        } else if (degree >= 67.5 && degree < 112.5) {
           // "right"
           this.speedX = this.maxSpeed;
-        } else if (degree > 225 && degree < 325) {
+          this.speedY = 0;
+        } else if (degree >= 112.5 && degree < 157.5) {
+          // "down-right"
+          this.speedX = this.maxSpeed;
+          this.speedY = this.maxSpeed;
+        } else if (degree >= 157.5 && degree < 202.5) {
+          // "down"
+          this.speedX = 0;
+          this.speedY = this.maxSpeed;
+        } else if (degree >= 202.5 && degree < 247.5) {
+          // "down-left"
+          this.speedX = -this.maxSpeed;
+          this.speedY = this.maxSpeed;
+        } else if (degree >= 247.5 && degree < 292.5) {
           // "left"
           this.speedX = -this.maxSpeed;
-        } else if (degree > 135 && degree < 225) {
-          // "down"
-          this.speedY = this.maxSpeed;
+          this.speedY = 0;
+        } else if (degree >= 292.5 && degree < 337.5) {
+          // "up-left"
+          this.speedX = -this.maxSpeed;
+          this.speedY = -this.maxSpeed;
         } else {
           // "up"
+          this.speedX = 0;
           this.speedY = -this.maxSpeed;
         }
 

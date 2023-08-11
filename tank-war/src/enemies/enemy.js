@@ -1,4 +1,4 @@
-import { NormalEnemyBullet, MovingEnemyBullet } from "../bullet.js";
+import { NormalEnemyProjectile, MovingEnemyProjectile } from "../projectile/projectile.js";
 import Animation from "../animation.js";
 
 import {
@@ -62,9 +62,9 @@ export default class Enemy extends Animation {
   createProjectiles() {
     for (let i = 0; i < this.numberOfProjectiles; i++) {
       if (this.weapon.type === "NormalWeapon") {
-        this.projectilesPool.push(new NormalEnemyBullet(this.game));
+        this.projectilesPool.push(new NormalEnemyProjectile(this.game));
       } else if (this.weapon.type === "MovingWeapon") {
-        this.projectilesPool.push(new MovingEnemyBullet(this.game));
+        this.projectilesPool.push(new MovingEnemyProjectile(this.game));
       }
     }
   }

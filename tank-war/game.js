@@ -1,10 +1,10 @@
 import { LiveBonus, ShieldBonus, UpgradeWeaponBonus } from "./src/bonus.js";
 import { RedEnemy, NavyEnemy, WeaponEnemy } from "./src/enemies/enemies.js";
-import { PlayerBullet } from "./src/bullet.js";
+import { PlayerProjectile } from "./src/projectile/projectile.js";
 import InputHandler from "./src/input.js";
 import Collision from "./src/collision.js";
 import Player from "./src/player.js";
-import Map1 from "./src/terrains/map1.js";
+import Map1 from "./src/terrains/maps.js";
 import Wall from "./src/wall.js";
 import UI from "./src/UI.js";
 
@@ -17,8 +17,8 @@ export default class Game {
     this.input = new InputHandler(this);
     this.UI = new UI(this);
 
-    this.terrains = new Map1();
-    
+    this.terrains = new Map1(this);
+
     this.enemies = [];
     this.maxEnemies = 3;
 
@@ -102,6 +102,8 @@ export default class Game {
       bonus.update(deltaTime);
     });
 
+    this.terrains.update(deltaTime);
+
     this.player.update(deltaTime);
 
     this.enemies.forEach((enemy) => {
@@ -144,7 +146,7 @@ export default class Game {
   // create projectile object poll
   createProjectiles() {
     for (let i = 0; i < this.numberOfProjectiles; i++) {
-      this.projectilesPool.push(new PlayerBullet(this));
+      this.projectilesPool.push(new PlayerProjectile(this));
     }
   }
 

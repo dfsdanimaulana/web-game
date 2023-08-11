@@ -42,7 +42,7 @@ export default class Player extends Animation {
     this.direction = "up";
     this.lives = 5;
     this.maxLives = this.lives;
-    this.liveBarColor = "blue"
+    this.liveBarColor = "blue";
     this.shield = false;
     this.upgradeWeapon = false;
   }
@@ -58,6 +58,7 @@ export default class Player extends Animation {
   update(deltaTime) {
     super.update(deltaTime);
 
+    
     // upgrade weapon
     this.weapon = this.weapons[this.weaponLevel];
 

@@ -1,5 +1,6 @@
 export default class Terrains {
-  constructor(x, y, degree) {
+  constructor(game, x, y, degree) {
+    this.game = game;
     this.image = terrainImage;
     this.width = 128;
     this.height = 128;
@@ -7,6 +8,14 @@ export default class Terrains {
     this.y = y;
     this.degree = degree;
   }
+  checkTerrainCollision(object) {
+    return this.game.checkCircleCollision(this, object);
+  }
+  randomDegree() {
+    const degree = [0, 90, 180, 270];
+    this.degree = degree[Math.floor(Math.random() * degree.length)];
+  }
+  update() {}
   draw(ctx) {
     ctx.save();
     ctx.translate(this.x + this.width * 0.5, this.y + this.height * 0.5);
