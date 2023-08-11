@@ -1,8 +1,30 @@
+import {
+  Grass,
+  Wood,
+  Tree,
+  Road,
+  Turn,
+  T_Junction,
+  Crossroad,
+} from "./elements.js";
+import { FourEndWall } from "./walls.js";
+
 export default class TerrainStructure {
   constructor(game) {
     this.game = game;
     this.terrainSize = 128;
     this.gridSize = 10;
+    this.map = [];
+    this.terrainClasses = [
+      Grass,
+      Wood,
+      Tree,
+      Road,
+      Turn,
+      T_Junction,
+      Crossroad,
+      FourEndWall
+    ];
   }
   generateTerrain() {
     for (let x = 0; x < this.terrainPattern.length; x++) {

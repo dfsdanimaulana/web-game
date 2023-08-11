@@ -15,7 +15,30 @@ export default class Animation {
       this.frameTimer += deltaTime;
     }
   }
-
+moveUp() {
+    this.direction = "up";
+    this.speedY = -this.maxSpeed;
+    this.speedX = 0;
+    this.degree = 0;
+  }
+  moveDown() {
+    this.direction = "down";
+    this.speedY = this.maxSpeed;
+    this.speedX = 0;
+    this.degree = 180;
+  }
+  moveLeft() {
+    this.direction = "left";
+    this.speedX = -this.maxSpeed;
+    this.speedY = 0;
+    this.degree = 270;
+  }
+  moveRight() {
+    this.direction = "right";
+    this.speedX = this.maxSpeed;
+    this.speedY = 0;
+    this.degree = 90;
+  }
   draw(ctx) {
     if (this.game.stroke) {
       ctx.save();

@@ -25,16 +25,22 @@ export default class Enemy extends Animation {
     this.frameX = 0;
     this.frameY = 0;
     this.maxFrame = 1;
+
+    this.drew = false;
+    this.inFrame = false;
+    this.inFrameGap = 10;
+
     this.width = this.spriteWidth * this.scale;
     this.height = this.spriteHeight * this.scale;
+
     this.x = Math.random() * (this.game.width - this.width);
     this.y = Math.random() * (this.game.height - this.height);
-    this.maxSpeed = 1;
+
+    this.maxSpeed = this.game.enemySpeed;
     this.speedX = 0;
     this.speedY = 0;
     this.markedForDeletion = false;
 
-    this.drew = false;
     this.degree = 0;
     this.direction = "up";
 
@@ -59,7 +65,7 @@ export default class Enemy extends Animation {
     this.createProjectiles();
 
     this.directionTimer = 0;
-    this.changeDirectionInterval = Math.random() * 1000 + 2000;
+    this.changeDirectionInterval = Math.random() * 2000 + 2000;
   }
   // create projectile object poll
   createProjectiles() {
@@ -85,6 +91,7 @@ export default class Enemy extends Animation {
       projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
     }
   }
+
   update(deltaTime) {
     super.update(deltaTime);
 
@@ -103,30 +110,30 @@ export default class Enemy extends Animation {
 
       switch (this.direction) {
         case "up":
-          this.speedY = -this.maxSpeed;
-          this.speedX = 0;
-          this.degree = 0;
+          this.moveUp();
           break;
         case "down":
-          this.speedY = this.maxSpeed;
-          this.speedX = 0;
-          this.degree = 180;
+          this.moveDown();
           break;
         case "left":
-          this.speedX = -this.maxSpeed;
-          this.speedY = 0;
-          this.degree = 270;
+          this.moveLeft();
           break;
         case "right":
-          this.speedX = this.maxSpeed;
-          this.speedY = 0;
-          this.degree = 90;
+          this.moveRight();
           break;
       }
       this.shoot();
       this.directionTimer = 0;
     } else {
       this.directionTimer += deltaTime;
+    }
+
+    // X and Y boundaries
+    if (this.x < 0 || this.x > this.game.width - this.width) {
+      this.speedX *= -1;
+    }
+    if (this.y < 0 || this.y > this.game.height - this.height) {
+      this.speedY *= -1;
     }
 
     if (this.lives < 1) {
@@ -146,7 +153,7 @@ export default class Enemy extends Animation {
     });
 
     // Check collision enemy - player
-    if (this.game.checkCircleCollision(this, this.game.player)) {
+    if (this.game.checkCircleCollision(this, this.game.player) && this.drew) {
       this.lives--;
       if (this.game.player.shield) {
         this.game.player.shield = false;
@@ -161,39 +168,33 @@ export default class Enemy extends Animation {
       this.game.gameOver = true;
     }
 
-    // X and Y boundaries
-    if (this.x < 0 || this.x > this.game.width - this.width) {
-      this.speedX *= -1;
-    }
-    if (this.y < 0 || this.y > this.game.height - this.height) {
-      this.speedY *= -1;
-    }
-
     this.x += this.speedX * this.maxSpeed;
     this.y += this.speedY * this.maxSpeed;
   }
+
   draw(ctx) {
     this.projectilesPool.forEach((projectile) => projectile.draw(ctx));
 
     if (!this.drew) {
       // Prevent enemies for overlapping with each other when spawn
       this.game.enemies.forEach((enemy) => {
-        if (this.x !== enemy.x && this.y !== enemy.y) {
+        if (this !== enemy) {
           if (this.game.checkCollision(this, enemy)) {
             this.x = Math.random() * (this.game.width - this.width);
             this.y = Math.random() * (this.game.height - this.height);
           }
         }
       });
-
-      // Prevent enemies for overlapping with player when spawn
+      
+      // Prevent enemy spawn over player
       if (this.game.checkCollision(this, this.game.player)) {
         this.x = Math.random() * (this.game.width - this.width);
         this.y = Math.random() * (this.game.height - this.height);
       }
       this.drew = true;
+    } else {
+      super.draw(ctx);
     }
-    super.draw(ctx);
     this.weapon.draw(ctx);
   }
 }

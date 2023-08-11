@@ -66,58 +66,21 @@ export default class Player extends Animation {
 
     // Horizontal movement
     if (this.game.input.keys.includes("ArrowRight")) {
-      this.speedX = this.maxSpeed;
-      this.direction = "right";
-      this.degree = 90;
+      this.moveRight()
     } else if (this.game.input.keys.includes("ArrowLeft")) {
-      this.speedX = -this.maxSpeed;
-      this.direction = "left";
-      this.degree = 270;
+      this.moveLeft()
     } else {
       this.speedX = 0;
     }
 
     // Vertical movement
     if (this.game.input.keys.includes("ArrowDown")) {
-      this.speedY = this.maxSpeed;
-      this.direction = "down";
-      this.degree = 180;
+      this.moveDown()
     } else if (this.game.input.keys.includes("ArrowUp")) {
-      this.speedY = -this.maxSpeed;
-      this.direction = "up";
-      this.degree = 0;
+      this.moveUp()
     } else {
       this.speedY = 0;
     }
-
-    // Check collision player - walls
-    /*
-    this.game.walls.forEach((wall) => {
-      const pX = this.x;
-      const pY = this.y;
-      if (this.game.checkCircleCollision(this, wall)) {
-        // stop player move when collision with wall
-        switch (this.direction) {
-          case "up":
-            this.x = pX;
-            this.y = pY + 5;
-            break;
-          case "down":
-            this.x = pX;
-            this.y = pY - 5;
-            break;
-          case "left":
-            this.x = pX + 5;
-            this.y = pY;
-            break;
-          case "right":
-            this.x = pX - 5;
-            this.y = pY;
-            break;
-        }
-      }
-    });
-    */
 
     // Prevent off screen
     if (this.x < 0) this.x = 0;
@@ -152,6 +115,25 @@ export default class Player extends Animation {
         2 * Math.PI
       );
       ctx.stroke();
+      ctx.restore();
+    }
+    if (this.game.stroke) {
+      function drawLine(x1, y1, x2, y2) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+      ctx.save();
+      ctx.strokeStyle = "blue";
+      this.game.enemies.map((enemy) => {
+        drawLine(
+          this.x + this.width / 2,
+          this.y + this.height / 2,
+          enemy.x + enemy.width / 2,
+          enemy.y + enemy.height / 2
+        );
+      });
       ctx.restore();
     }
     super.draw(ctx);

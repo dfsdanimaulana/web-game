@@ -20,6 +20,7 @@ export default class Game {
 
     this.enemies = [];
     this.maxEnemies = 3;
+    this.enemySpeed = Math.random() * 0.5 + 1;
 
     this.projectilesPool = [];
     this.numberOfProjectiles = 1;
@@ -40,7 +41,7 @@ export default class Game {
     this.bonusExpiredTimer = 0;
     this.bonusExpiredInterval = 10000;
 
-    this.stroke = false;
+    this.stroke = true;
   }
   restart() {
     this.maxEnemies = 3;
@@ -195,5 +196,32 @@ export default class Game {
     } else {
       this.bonuses.push(new UpgradeWeaponBonus(this));
     }
+  }
+
+  // Bounce object when collision
+  bounceObject(value) {
+    const object = value;
+    const pX = object.x;
+    const pY = object.y;
+    // stop player move when collision with wall
+    switch (object.direction) {
+      case "up":
+        object.x = pX;
+        object.y = pY + 5;
+        break;
+      case "down":
+        object.x = pX;
+        object.y = pY - 5;
+        break;
+      case "left":
+        object.x = pX + 5;
+        object.y = pY;
+        break;
+      case "right":
+        object.x = pX - 5;
+        object.y = pY;
+        break;
+    }
+    return object;
   }
 }
