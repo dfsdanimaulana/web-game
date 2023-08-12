@@ -7,16 +7,24 @@ class Bonus {
     this.y = Math.random() * (this.game.height - this.height);
     this.markedForDeletion = false;
     this.drew = false;
+
+    this.angle = 0;
+    this.angleSpeed = 0.2;
+    this.curve = 0.5;
   }
   checkCollision() {
     return this.game.checkCollision(this, this.game.player);
   }
-  delete() {
+  remove() {
     this.markedForDeletion = true;
     this.game.bonusExpiredTimer = 0;
     this.game.bonusTimer = 0;
   }
-  update() {}
+  update() {
+    // wave movement
+    this.y += this.curve * Math.sin(this.angle);
+    this.angle += this.angleSpeed;
+  }
   draw(ctx) {
     if (!this.drew) {
       if (this.checkCollision()) {
@@ -52,7 +60,7 @@ export class UpgradeWeaponBonus extends Bonus {
       if (this.game.player.weaponLevel < this.game.player.maxWeaponLevel - 1) {
         this.game.player.weaponLevel++;
       }
-      this.delete();
+      this.remove();
     }
   }
 }
@@ -66,7 +74,7 @@ export class ShieldBonus extends Bonus {
     super.update();
     if (this.checkCollision()) {
       this.game.player.shield = true;
-      this.delete();
+      this.remove();
     }
   }
 }
@@ -82,7 +90,22 @@ export class LiveBonus extends Bonus {
       if (this.game.player.lives < this.game.player.maxLives) {
         this.game.player.lives++;
       }
-      this.delete();
+      this.remove();
+    }
+  }
+}
+
+export class RocketBonus extends Bonus {
+  constructor(game) {
+    super(game);
+    this.color = "blue";
+  }
+  update() {
+    super.update();
+    if (this.checkCollision()) {
+      this.game.player.weaponLevel = 5;
+      this.game.player.rocketInterval = 10000;
+      this.remove();
     }
   }
 }

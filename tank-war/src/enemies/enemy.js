@@ -37,7 +37,7 @@ export default class Enemy extends Animation {
     this.x = Math.random() * (this.game.width - this.width);
     this.y = Math.random() * (this.game.height - this.height);
 
-    this.maxSpeed = Math.random() * 0.5 + 1
+    this.maxSpeed = Math.random() * 0.5 + 1;
     this.speedX = 0;
     this.speedY = 0;
     this.markedForDeletion = false;
@@ -90,7 +90,7 @@ export default class Enemy extends Animation {
   shoot() {
     const projectile = this.getProjectile();
     if (projectile) {
-    this.weapon.active = true;
+      this.weapon.active = true;
       projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
     }
   }
@@ -105,11 +105,12 @@ export default class Enemy extends Animation {
 
     if (this.directionTimer > this.changeDirectionInterval || !this.drew) {
       const random = Math.random();
+      const diff = 1 / 4;
 
-      if (random < 0.25) this.direction = "up";
-      else if (random < 0.5) this.direction = "right";
-      else if (random < 0.75) this.direction = "down";
-      else this.direction = "left";
+      if (random < diff * 1) this.direction = "up";
+      else if (random < diff * 2) this.direction = "left";
+      else if (random < diff * 3) this.direction = "right";
+      else this.direction = "down";
 
       switch (this.direction) {
         case "up":
@@ -123,6 +124,18 @@ export default class Enemy extends Animation {
           break;
         case "right":
           this.moveRight();
+          break;
+        case "up-left":
+          this.moveUpLeft();
+          break;
+        case "up-right":
+          this.moveUpRight();
+          break;
+        case "down-left":
+          this.moveDownLeft();
+          break;
+        case "down-right":
+          this.moveDownRight();
           break;
       }
       this.shoot();

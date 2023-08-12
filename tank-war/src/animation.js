@@ -49,6 +49,33 @@ export default class Animation {
     this.speedY = 0;
     this.degree = 90;
   }
+
+  moveUpLeft() {
+    this.direction = "up-left";
+    this.speedX = -this.maxSpeed;
+    this.speedY = -this.maxSpeed;
+    this.degree = 315;
+  }
+  moveUpRight() {
+    this.direction = "up-right";
+    this.speedX = this.maxSpeed;
+    this.speedY = -this.maxSpeed;
+    this.degree = 45;
+  }
+
+  moveDownLeft() {
+    this.direction = "down-left";
+    this.speedX = -this.maxSpeed;
+    this.speedY = this.maxSpeed;
+    this.degree = 225;
+  }
+  moveDownRight() {
+    this.direction = "down-right";
+    this.speedX = this.maxSpeed;
+    this.speedY = this.maxSpeed;
+    this.degree = 135;
+  }
+
   draw(ctx) {
     if (this.game.stroke) {
       ctx.save();

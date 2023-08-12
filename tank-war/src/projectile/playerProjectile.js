@@ -21,6 +21,7 @@ class PlayerProjectile extends Projectile {
 export class NormalPlayerProjectile extends PlayerProjectile {
   constructor(game) {
     super(game);
+    this.type = "NormalProjectile"
   }
   update() {
     super.update();
@@ -52,6 +53,7 @@ export class NormalPlayerProjectile extends PlayerProjectile {
 export class RocketPlayerProjectile extends PlayerProjectile {
   constructor(game) {
     super(game);
+    this.type = "RocketProjectile"
   }
   update() {
     super.update();

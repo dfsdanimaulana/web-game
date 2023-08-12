@@ -36,9 +36,10 @@ export default class Player extends Animation {
       new PlayerWeapon1_3(this.game),
       new PlayerWeapon2_1(this.game),
       new PlayerWeapon2_2(this.game),
-      new PlayerWeapon2_3(this.game),
+      new PlayerWeapon2_3(this.game), // Rocket
     ];
-    this.weaponLevel = 0
+
+    this.weaponLevel = 0;
     this.maxWeaponLevel = this.weapons.length;
     this.weapon = this.weapons[this.weaponLevel];
 
@@ -56,6 +57,9 @@ export default class Player extends Animation {
     this.liveBarColor = "blue";
     this.upgradeWeapon = false;
     this.shield = false;
+
+    this.rocketTimer = 0;
+    this.rocketInterval = 0;
   }
   restart() {
     this.x = this.game.width * 0.5 - this.width * 0.5;
@@ -69,13 +73,26 @@ export default class Player extends Animation {
   update(deltaTime) {
     super.update(deltaTime);
 
+    // Set rocket timer when rocket active
+    if (this.rocketInterval > 0) {
+      if (this.rocketTimer > this.rocketInterval) {
+        // reset weapon to normal
+        this.weaponLevel = 0
+        this.rocketTimer = 0;
+        this.rocketInterval = 0;
+      } else {
+        this.rocketTimer += deltaTime;
+      }
+    } else {
+      this.rocketTimer = 0;
+    }
+
+    this.weapon = this.weapons[this.weaponLevel];
+
     // update projectile
     this.projectilesPool.forEach((projectile) => {
       projectile.update(deltaTime);
     });
-
-    // upgrade weapon
-    this.weapon = this.weapons[this.weaponLevel];
 
     // Weapon animation
     this.weapon.update(deltaTime);
@@ -85,35 +102,47 @@ export default class Player extends Animation {
       this.moveRight();
     } else if (this.game.input.keys.includes("ArrowLeft")) {
       this.moveLeft();
-    } else {
-      this.speedX = 0;
     }
 
     // Vertical movement
-    if (this.game.input.keys.includes("ArrowDown")) {
+    else if (this.game.input.keys.includes("ArrowDown")) {
       this.moveDown();
     } else if (this.game.input.keys.includes("ArrowUp")) {
       this.moveUp();
     } else {
       this.speedY = 0;
-    }
-    }
-
-  // create projectile object poll
-  createProjectiles() {
-    for (let i = 0; i < this.numberOfProjectiles; i++) {
-      if (this.weapon.type === "NormalWeapon") {
-        this.projectilesPool.push(new NormalPlayerProjectile(this.game));
-      } else if (this.weapon.type === "RocketWeapon") {
-        this.projectilesPool.push(new RocketPlayerProjectile(this.game));
-      }
+      this.speedX = 0;
     }
   }
 
-  // get free projectile object from the pool
+  // create projectile and rocket object poll
+  createProjectiles() {
+    for (let i = 0; i < this.numberOfProjectiles; i++) {
+      this.projectilesPool.push(
+        new NormalPlayerProjectile(this.game),
+        new RocketPlayerProjectile(this.game)
+      );
+    }
+  }
+
+  // get free projectile and rocket object from the pool
   getProjectile() {
-    for (let i = 0; i < this.projectilesPool.length; i++) {
-      if (this.projectilesPool[i].free) return this.projectilesPool[i];
+    if (this.weapon.type === "RocketWeapon") {
+      for (let i = 0; i < this.projectilesPool.length; i++) {
+        if (
+          this.projectilesPool[i].free &&
+          this.projectilesPool[i].type === "RocketProjectile"
+        )
+          return this.projectilesPool[i];
+      }
+    } else if (this.weapon.type === "NormalWeapon") {
+      for (let i = 0; i < this.projectilesPool.length; i++) {
+        if (
+          this.projectilesPool[i].free &&
+          this.projectilesPool[i].type === "NormalProjectile"
+        )
+          return this.projectilesPool[i];
+      }
     }
   }
 

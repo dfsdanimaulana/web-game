@@ -37,8 +37,8 @@ export default class UI {
         this.fromY * 2.5
       );
     }
-    this.game.input.keys.forEach((key) => {
-      ctx.fillText(key, this.fromX, this.fromY * 4);
+    this.game.input.keys.forEach((key, index) => {
+      ctx.fillText(key, this.fromX, this.fromY * 4 + 20*index);
     });
     ctx.restore();
   }
