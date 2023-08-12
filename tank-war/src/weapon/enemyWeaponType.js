@@ -1,4 +1,4 @@
-import { NormalWeapon, MovingWeapon } from "./enemyWeapon.js";
+import { NormalWeapon, MovingWeapon, RocketWeapon } from "./enemyWeapon.js";
 
 export class EnemyRedWeapon1_1 extends NormalWeapon {
   constructor(enemy) {
@@ -18,7 +18,7 @@ export class EnemyRedWeapon1_3 extends NormalWeapon {
     this.image = enemyWeaponRed1_3;
   }
 }
-export class EnemyRedWeapon1_4 extends NormalWeapon {
+export class EnemyRedWeapon1_4 extends MovingWeapon {
   constructor(enemy) {
     super(enemy);
     this.image = enemyWeaponRed1_4;

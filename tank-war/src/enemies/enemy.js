@@ -1,7 +1,8 @@
 import {
   NormalEnemyProjectile,
   MovingEnemyProjectile,
-} from "../projectile/projectile.js";
+  RocketEnemyProjectile,
+} from "../projectile/enemyProjectile.js";
 import Animation from "../animation.js";
 
 import {
@@ -13,7 +14,7 @@ import {
   EnemyRedWeapon2_2,
   EnemyRedWeapon2_3,
   EnemyRedWeapon2_4,
-} from "../weapon/enemyRedWeapon.js";
+} from "../weapon/enemyWeaponType.js";
 
 export default class Enemy extends Animation {
   constructor(game) {
@@ -74,6 +75,8 @@ export default class Enemy extends Animation {
         this.projectilesPool.push(new NormalEnemyProjectile(this.game));
       } else if (this.weapon.type === "MovingWeapon") {
         this.projectilesPool.push(new MovingEnemyProjectile(this.game));
+      } else if (this.weapon.type === "RocketWeapon") {
+        this.projectilesPool.push(new RocketEnemyProjectile(this.game));
       }
     }
   }
@@ -185,7 +188,7 @@ export default class Enemy extends Animation {
           }
         }
       });
-      
+
       // Prevent enemy spawn over player
       if (this.game.checkCollision(this, this.game.player)) {
         this.x = Math.random() * (this.game.width - this.width);

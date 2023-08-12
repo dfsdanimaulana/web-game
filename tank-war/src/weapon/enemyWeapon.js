@@ -59,8 +59,8 @@ export class MovingWeapon extends EnemyWeapon {
   constructor(enemy) {
     super(enemy);
     this.type = "MovingWeapon";
-    this.degreeModifier = 1;
     this.rotateSpeed = Math.random() * 0.02 + 0.01;
+    this.degreeModifier = 1;
     this.parentDegreeModifier = 0;
   }
 
@@ -68,7 +68,7 @@ export class MovingWeapon extends EnemyWeapon {
     if (this.timer > this.timerInterval) {
       const currentDegree = this.degreeModifier * this.degree;
       if (currentDegree > 360 + this.degree) {
-        this.degree = this.initialDegree
+        this.degree = this.initialDegree;
         this.degreeModifier = 1;
       } else {
         this.degreeModifier += this.rotateSpeed;
@@ -77,5 +77,21 @@ export class MovingWeapon extends EnemyWeapon {
     } else {
       this.timer += deltaTime;
     }
+  }
+}
+
+export class RocketWeapon extends MovingWeapon {
+  constructor(enemy) {
+    super(enemy);
+    this.type = "RocketWeapon";
+    this.degreeModifier = 1;
+    this.parentDegreeModifier = 0;
+  }
+  update(deltaTime) {
+    super.update(deltaTime);
+
+    // TODO: get player coordinate
+
+    // TODO:  calculate angle with player
   }
 }

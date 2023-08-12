@@ -1,25 +1,35 @@
 import Weapon from "./weapon.js";
+import { findNearestObject, calculateAngle } from "../utils.js";
 
 class PlayerWeapon extends Weapon {
-  constructor(player) {
+  constructor(game) {
     super();
-    this.player = player;
+    this.game = game;
     this.spriteWidth = 128;
     this.spriteHeight = 128;
     this.frameX = 0;
     this.frameY = 0;
     this.maxFrame = 7;
-    this.width = this.spriteWidth * this.player.scale;
-    this.height = this.spriteHeight * this.player.scale;
+    this.width = this.spriteWidth * this.game.scale;
+    this.height = this.spriteHeight * this.game.scale;
+    this.degree = 0;
+    this.initialDegree = this.degree;
+    this.degreeModifier = 0;
+    this.parentDegreeModifier = 1;
   }
 
   draw(ctx) {
     ctx.save();
     ctx.translate(
-      this.player.x + this.width * 0.5,
-      this.player.y + this.height * 0.5
+      this.game.player.x + this.width * 0.5,
+      this.game.player.y + this.height * 0.5
     );
-    ctx.rotate((this.player.degree * Math.PI) / 180);
+    ctx.rotate(
+      ((this.game.player.degree * this.parentDegreeModifier +
+        this.degree * this.degreeModifier) *
+        Math.PI) /
+        180
+    );
     ctx.drawImage(
       this.image,
       this.frameX * this.spriteWidth,
@@ -35,42 +45,32 @@ class PlayerWeapon extends Weapon {
   }
 }
 
-export class PlayerWeapon1_1 extends PlayerWeapon {
-  constructor(player) {
-    super(player);
-    this.image = playerWeaponBlue1_1;
+export class NormalPlayerWeapon extends PlayerWeapon {
+  constructor(game) {
+    super(game);
+    this.type = "NormalWeapon";
   }
 }
-export class PlayerWeapon1_2 extends PlayerWeapon {
-  constructor(player) {
-    super(player);
-    this.image = playerWeaponBlue1_2;
+
+export class RocketPlayerWeapon extends PlayerWeapon {
+  constructor(game) {
+    super(game);
+    this.type = "RocketWeapon";
+    this.degreeModifier = 1;
+    this.parentDegreeModifier = 0;
   }
-}
-export class PlayerWeapon1_3 extends PlayerWeapon {
-  constructor(player) {
-    super(player);
-    this.image = playerWeaponBlue1_3;
-  }
-}
-export class PlayerWeapon2_1 extends PlayerWeapon {
-  constructor(player) {
-    super(player);
-    this.image = playerWeaponBlue2_1;
-    this.maxFrame = 10;
-  }
-}
-export class PlayerWeapon2_2 extends PlayerWeapon {
-  constructor(player) {
-    super(player);
-    this.image = playerWeaponBlue2_2;
-    this.maxFrame = 10;
-  }
-}
-export class PlayerWeapon2_3 extends PlayerWeapon {
-  constructor(player) {
-    super(player);
-    this.image = playerWeaponBlue2_3;
-    this.maxFrame = 10;
+  update(deltaTime) {
+    super.update(deltaTime);
+
+    const pX = this.game.player.x;
+    const pY = this.game.player.y;
+
+    // get nearest enemy coordinate
+    const enemy = findNearestObject(this.game.enemies, pX, pY);
+
+    // calculate angle with nearest enemy
+    const angle = calculateAngle(pX, pY, enemy.x, enemy.y);
+
+    this.degree = angle;
   }
 }

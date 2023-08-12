@@ -1,12 +1,17 @@
 import Animation from "./animation.js";
 import {
+  NormalPlayerProjectile,
+  RocketPlayerProjectile,
+} from "./projectile/playerProjectile.js";
+import {
   PlayerWeapon1_1,
   PlayerWeapon1_2,
   PlayerWeapon1_3,
   PlayerWeapon2_1,
   PlayerWeapon2_2,
   PlayerWeapon2_3,
-} from "./weapon/playerWeapon.js";
+} from "./weapon/playerWeaponType.js";
+import { drawCircle } from "./utils.js";
 
 export default class Player extends Animation {
   constructor(game) {
@@ -25,16 +30,20 @@ export default class Player extends Animation {
     this.x = this.game.width * 0.5 - this.width * 0.5;
     this.y = this.game.height * 0.5 - this.height * 0.5;
     this.weapons = [
-      new PlayerWeapon1_1(this),
-      new PlayerWeapon1_2(this),
-      new PlayerWeapon1_3(this),
-      new PlayerWeapon2_1(this),
-      new PlayerWeapon2_2(this),
-      new PlayerWeapon2_3(this),
+      new PlayerWeapon1_1(this.game),
+      new PlayerWeapon1_2(this.game),
+      new PlayerWeapon1_3(this.game),
+      new PlayerWeapon2_1(this.game),
+      new PlayerWeapon2_2(this.game),
+      new PlayerWeapon2_3(this.game),
     ];
     this.weaponLevel = 0;
     this.maxWeaponLevel = this.weapons.length;
     this.weapon = this.weapons[this.weaponLevel];
+
+    this.projectilesPool = [];
+    this.numberOfProjectiles = 1;
+    this.createProjectiles();
 
     this.speedX = 0;
     this.speedY = 0;
@@ -43,8 +52,8 @@ export default class Player extends Animation {
     this.lives = 5;
     this.maxLives = this.lives;
     this.liveBarColor = "blue";
-    this.shield = false;
     this.upgradeWeapon = false;
+    this.shield = false;
   }
   restart() {
     this.x = this.game.width * 0.5 - this.width * 0.5;
@@ -58,6 +67,11 @@ export default class Player extends Animation {
   update(deltaTime) {
     super.update(deltaTime);
 
+    // update projectile
+    this.projectilesPool.forEach((projectile) => {
+      projectile.update(deltaTime);
+    });
+
     // upgrade weapon
     this.weapon = this.weapons[this.weaponLevel];
 
@@ -66,18 +80,18 @@ export default class Player extends Animation {
 
     // Horizontal movement
     if (this.game.input.keys.includes("ArrowRight")) {
-      this.moveRight()
+      this.moveRight();
     } else if (this.game.input.keys.includes("ArrowLeft")) {
-      this.moveLeft()
+      this.moveLeft();
     } else {
       this.speedX = 0;
     }
 
     // Vertical movement
     if (this.game.input.keys.includes("ArrowDown")) {
-      this.moveDown()
+      this.moveDown();
     } else if (this.game.input.keys.includes("ArrowUp")) {
-      this.moveUp()
+      this.moveUp();
     } else {
       this.speedY = 0;
     }
@@ -92,31 +106,40 @@ export default class Player extends Animation {
     this.x += this.speedX;
     this.y += this.speedY;
   }
+
+  // create projectile object poll
+  createProjectiles() {
+    for (let i = 0; i < this.numberOfProjectiles; i++) {
+      if (this.weapon.type === "NormalWeapon") {
+        this.projectilesPool.push(new NormalPlayerProjectile(this.game));
+      } else if (this.weapon.type === "RocketWeapon") {
+        this.projectilesPool.push(new RocketPlayerProjectile(this.game));
+      }
+    }
+  }
+
+  // get free projectile object from the pool
+  getProjectile() {
+    for (let i = 0; i < this.projectilesPool.length; i++) {
+      if (this.projectilesPool[i].free) return this.projectilesPool[i];
+    }
+  }
+
   shoot() {
     this.weapon.active = true;
-    const projectile = this.game.getProjectile();
+    const projectile = this.getProjectile();
     if (projectile) {
       projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
     }
   }
   draw(ctx) {
-    if (this.shield) {
-      // Draw shield when active
-      ctx.save();
-      ctx.strokeStyle = "green";
-      ctx.lineWidth = 2;
-      const radius = this.width * 0.75;
-      ctx.beginPath();
-      ctx.arc(
-        this.x + this.width / 2,
-        this.y + this.height / 2,
-        radius,
-        0,
-        2 * Math.PI
-      );
-      ctx.stroke();
-      ctx.restore();
-    }
+    // Draw projectile
+    this.projectilesPool.forEach((projectile) => {
+      projectile.draw(ctx);
+    });
+
+    // Draw shield when active
+
     if (this.game.stroke) {
       function drawLine(x1, y1, x2, y2) {
         ctx.beginPath();
@@ -138,5 +161,25 @@ export default class Player extends Animation {
     }
     super.draw(ctx);
     this.weapon.draw(ctx);
+    if (this.shield) {
+      ctx.save();
+      // Draw circle
+      drawCircle(ctx, this.x, this.y, this.width, 0.75);
+
+      // Draw stroke
+      ctx.lineWidth = 2;
+      const radius = this.width * 0.75;
+      ctx.strokeStyle = "lightgreen";
+      ctx.beginPath();
+      ctx.arc(
+        this.x + this.width / 2,
+        this.y + this.height / 2,
+        radius,
+        0,
+        2 * Math.PI
+      );
+      ctx.stroke();
+      ctx.restore();
+    }
   }
 }

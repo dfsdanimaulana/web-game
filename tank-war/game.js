@@ -1,6 +1,5 @@
 import { LiveBonus, ShieldBonus, UpgradeWeaponBonus } from "./src/bonus.js";
 import { RedEnemy, NavyEnemy, WeaponEnemy } from "./src/enemies/enemies.js";
-import { PlayerProjectile } from "./src/projectile/projectile.js";
 import InputHandler from "./src/input.js";
 import Collision from "./src/collision.js";
 import Player from "./src/player.js";
@@ -22,10 +21,6 @@ export default class Game {
     this.maxEnemies = 3;
     this.enemySpeed = Math.random() * 0.5 + 1;
 
-    this.projectilesPool = [];
-    this.numberOfProjectiles = 1;
-    this.createProjectiles();
-
     this.collisions = [];
 
     this.score = 0;
@@ -37,11 +32,11 @@ export default class Game {
 
     this.bonuses = [];
     this.bonusTimer = 0;
-    this.bonusInterval = 15000; // in ms
     this.bonusExpiredTimer = 0;
+    this.bonusInterval = 15000; // in ms
     this.bonusExpiredInterval = 10000;
 
-    this.stroke = true;
+    this.stroke = false;
   }
   restart() {
     this.maxEnemies = 3;
@@ -89,9 +84,6 @@ export default class Game {
     if (this.input.keys.includes("Enter") || this.input.keys.includes(" "))
       this.player.shoot();
 
-    this.projectilesPool.forEach((projectile) => {
-      projectile.update(deltaTime);
-    });
     this.bonuses.forEach((bonus) => {
       bonus.update(deltaTime);
     });
@@ -114,9 +106,7 @@ export default class Game {
   }
   draw(ctx) {
     this.terrains.draw(ctx);
-    this.projectilesPool.forEach((projectile) => {
-      projectile.draw(ctx);
-    });
+
     this.enemies.forEach((enemy) => {
       enemy.draw(ctx);
     });
@@ -132,20 +122,6 @@ export default class Game {
 
   createExplosion(x, y, size) {
     this.collisions.push(new Collision(x, y, size));
-  }
-
-  // create projectile object poll
-  createProjectiles() {
-    for (let i = 0; i < this.numberOfProjectiles; i++) {
-      this.projectilesPool.push(new PlayerProjectile(this));
-    }
-  }
-
-  // get free projectile object from the pool
-  getProjectile() {
-    for (let i = 0; i < this.projectilesPool.length; i++) {
-      if (this.projectilesPool[i].free) return this.projectilesPool[i];
-    }
   }
 
   addEnemy() {
