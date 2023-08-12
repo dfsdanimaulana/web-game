@@ -125,18 +125,7 @@ export default class Enemy extends Animation {
         case "right":
           this.moveRight();
           break;
-        case "up-left":
-          this.moveUpLeft();
-          break;
-        case "up-right":
-          this.moveUpRight();
-          break;
-        case "down-left":
-          this.moveDownLeft();
-          break;
-        case "down-right":
-          this.moveDownRight();
-          break;
+        
       }
       this.shoot();
       this.directionTimer = 0;

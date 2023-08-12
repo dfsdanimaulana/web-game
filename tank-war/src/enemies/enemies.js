@@ -25,4 +25,5 @@ export class NavyEnemy extends Enemy {
     this.lives = 3;
     this.maxLives = this.lives;
   }
+  
 }
