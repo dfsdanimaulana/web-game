@@ -14,8 +14,18 @@ export default class Animation {
     } else {
       this.frameTimer += deltaTime;
     }
+
+    // Prevent off screen
+    if (this.x < 0) this.x = 0;
+    if (this.x > this.game.width - this.width)
+      this.x = this.game.width - this.width;
+    if (this.y < 0) this.y = 0;
+    if (this.y > this.game.height - this.height)
+      this.y = this.game.height - this.height;
+    this.x += this.speedX;
+    this.y += this.speedY;
   }
-moveUp() {
+  moveUp() {
     this.direction = "up";
     this.speedY = -this.maxSpeed;
     this.speedX = 0;

@@ -37,7 +37,7 @@ export default class Enemy extends Animation {
     this.x = Math.random() * (this.game.width - this.width);
     this.y = Math.random() * (this.game.height - this.height);
 
-    this.maxSpeed = this.game.enemySpeed;
+    this.maxSpeed = Math.random() * 0.5 + 1
     this.speedX = 0;
     this.speedY = 0;
     this.markedForDeletion = false;
@@ -88,9 +88,9 @@ export default class Enemy extends Animation {
     }
   }
   shoot() {
-    this.weapon.active = true;
     const projectile = this.getProjectile();
     if (projectile) {
+    this.weapon.active = true;
       projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
     }
   }

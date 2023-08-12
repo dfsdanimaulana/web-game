@@ -12,7 +12,6 @@ export default class Projectile {
     this.onAir = false;
   }
   update() {
-    
     if (
       this.y < -this.height ||
       this.y > this.game.height ||
@@ -26,9 +25,16 @@ export default class Projectile {
   }
   draw(ctx) {
     if (!this.free) {
+      const centerX = this.x + this.width * 0.5;
+      const centerY = this.y + this.height * 0.5;
+      const radius = this.width * 0.5;
       ctx.save();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
       ctx.fillStyle = this.color;
-      ctx.fillRect(this.x, this.y, this.width, this.height);
+      ctx.fill();
+      ctx.strokeStyle = this.color;
+      ctx.stroke();
       ctx.restore();
     }
   }
@@ -44,5 +50,3 @@ export default class Projectile {
     this.speedY = 0;
   }
 }
-
-

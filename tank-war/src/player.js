@@ -29,6 +29,7 @@ export default class Player extends Animation {
     this.height = this.spriteHeight * this.scale;
     this.x = this.game.width * 0.5 - this.width * 0.5;
     this.y = this.game.height * 0.5 - this.height * 0.5;
+
     this.weapons = [
       new PlayerWeapon1_1(this.game),
       new PlayerWeapon1_2(this.game),
@@ -37,7 +38,7 @@ export default class Player extends Animation {
       new PlayerWeapon2_2(this.game),
       new PlayerWeapon2_3(this.game),
     ];
-    this.weaponLevel = 0;
+    this.weaponLevel = 0
     this.maxWeaponLevel = this.weapons.length;
     this.weapon = this.weapons[this.weaponLevel];
 
@@ -49,6 +50,7 @@ export default class Player extends Animation {
     this.speedY = 0;
     this.maxSpeed = 5;
     this.direction = "up";
+
     this.lives = 5;
     this.maxLives = this.lives;
     this.liveBarColor = "blue";
@@ -95,17 +97,7 @@ export default class Player extends Animation {
     } else {
       this.speedY = 0;
     }
-
-    // Prevent off screen
-    if (this.x < 0) this.x = 0;
-    if (this.x > this.game.width - this.width)
-      this.x = this.game.width - this.width;
-    if (this.y < 0) this.y = 0;
-    if (this.y > this.game.height - this.height)
-      this.y = this.game.height - this.height;
-    this.x += this.speedX;
-    this.y += this.speedY;
-  }
+    }
 
   // create projectile object poll
   createProjectiles() {
@@ -126,9 +118,9 @@ export default class Player extends Animation {
   }
 
   shoot() {
-    this.weapon.active = true;
     const projectile = this.getProjectile();
     if (projectile) {
+      this.weapon.active = true;
       projectile.start(this.x + this.width * 0.5, this.y + this.height * 0.5);
     }
   }
