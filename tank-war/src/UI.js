@@ -9,13 +9,13 @@ export default class UI {
   }
   draw(ctx) {
     ctx.save();
-    ctx.shadowOffsetX = 2
-    ctx.shadowOffsetY = 2
-    ctx.shadowColor = 'black'
-    ctx.shadowBlur = 0
-    ctx.font = this.fontSize + 'px ' + this.fontFamily
-    ctx.textAlign = 'left'
-    ctx.fillStyle = this.fontColor
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowColor = "black";
+    ctx.shadowBlur = 0;
+    ctx.font = this.fontSize + "px " + this.fontFamily;
+    ctx.textAlign = "left";
+    ctx.fillStyle = this.fontColor;
 
     ctx.fillText("Score: " + this.game.score, this.fromX, this.fromY * 1);
 
@@ -38,8 +38,22 @@ export default class UI {
       );
     }
     this.game.input.keys.forEach((key, index) => {
-      ctx.fillText(key, this.fromX, this.fromY * 4 + 20*index);
+      ctx.fillText(key, this.fromX, this.fromY * 4 + 20 * index);
     });
+
+    if (this.game.gameOver) {
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.font = "100px Impact";
+      ctx.fillText("GAME OVER", this.game.width * 0.5, this.game.height * 0.5);
+      ctx.font = "20px Impact";
+      ctx.fillText(
+        "press R/SwipeDown to restart",
+        this.game.width * 0.5,
+        this.game.height * 0.5 + 30
+      );
+      ctx.restore();
+    }
     ctx.restore();
   }
 }

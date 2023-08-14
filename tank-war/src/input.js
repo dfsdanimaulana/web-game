@@ -1,6 +1,5 @@
 export default class InputHandler {
-    constructor(game) {
-        this.game = game
+    constructor() {
         this.keys = []
         this.swipeStartX = 0
         this.swipeStartY = 0

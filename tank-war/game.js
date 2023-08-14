@@ -4,7 +4,7 @@ import {
   UpgradeWeaponBonus,
   RocketBonus,
 } from "./src/bonus.js";
-import { RedEnemy, NavyEnemy, WeaponEnemy } from "./src/enemies/enemies.js";
+import Enemy from "./src/enemy.js";
 import InputHandler from "./src/input.js";
 import Collision from "./src/collision.js";
 import Player from "./src/player.js";
@@ -21,7 +21,7 @@ export default class Game {
     this.height = height;
     this.scale = 1;
     this.player = new Player(this);
-    this.input = new InputHandler(this);
+    this.input = new InputHandler();
     this.UI = new UI(this);
 
     this.terrainsType = [
@@ -41,7 +41,7 @@ export default class Game {
     this.collisions = [];
 
     this.score = 0;
-    // TODO: add best score
+    // TODO: add best score and store in local storage 
     this.gameOver = false;
 
     this.bonuses = [];
@@ -52,16 +52,41 @@ export default class Game {
 
     this.stroke = false;
   }
+
   restart() {
+    this.gameOver = false;
     this.maxEnemies = 3;
     this.enemies = [];
+    this.score = 0;
+    this.bonusTimer = 0;
+    this.bonusExpiredTimer = 0;
+    this.terrains =
+      this.terrainsType[Math.floor(Math.random() * this.terrainsType.length)];
     this.player.restart();
   }
-  update(deltaTime) {
 
+  update(deltaTime) {
+    // debug mode
+    if (this.input.keys.includes("d")) {
+      this.stroke = !this.stroke;
+    }
+
+    // restart game handler
+    if (
+      (this.input.keys.includes("ArrowDown") ||
+        this.input.keys.includes("r")) &&
+      this.gameOver
+    ) {
+      this.restart();
+    }
+
+    // Lose condition
+    if (this.player.lives < 1) {
+      this.gameOver = true;
+    }
 
     // Bonus interval timer
-    if (this.bonuses.length < 1) {
+    if (this.bonuses.length < 1 && !this.gameOver) {
       if (this.bonusTimer > this.bonusInterval) {
         this.createBonus();
         this.bonusTimer = 0;
@@ -81,15 +106,12 @@ export default class Game {
     }
 
     // Summon enemy when enemies array is empty
-    if (this.enemies.length < 1) {
+    if (this.enemies.length < 1 && !this.gameOver) {
       for (let i = 0; i < this.maxEnemies; i++) {
         this.addEnemy();
       }
       this.maxEnemies++;
     }
-
-    if (this.input.keys.includes("Enter") || this.input.keys.includes(" "))
-      this.player.shoot();
 
     this.bonuses.forEach((bonus) => {
       bonus.update(deltaTime);
@@ -102,25 +124,28 @@ export default class Game {
     this.enemies.forEach((enemy) => {
       enemy.update(deltaTime);
     });
+
     this.collisions.forEach((collision) => {
       collision.update(deltaTime);
     });
+
+    // Delete object when markedForDeletion is true
     this.collisions = this.collisions.filter(
       (collision) => !collision.markedForDeletion
     );
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
     this.bonuses = this.bonuses.filter((bonus) => !bonus.markedForDeletion);
   }
+
   draw(ctx) {
     this.terrains.draw(ctx);
-
+    this.player.draw(ctx);
     this.enemies.forEach((enemy) => {
       enemy.draw(ctx);
     });
     this.bonuses.forEach((bonus) => {
       bonus.draw(ctx);
     });
-    this.player.draw(ctx);
     this.collisions.forEach((collision) => {
       collision.draw(ctx);
     });
@@ -132,16 +157,7 @@ export default class Game {
   }
 
   addEnemy() {
-    const randomNumber = Math.random();
-    const diff = 1 / 3;
-
-    if (randomNumber < diff * 1) {
-      this.enemies.push(new RedEnemy(this));
-    } else if (randomNumber < diff * 2) {
-      this.enemies.push(new NavyEnemy(this));
-    } else {
-      this.enemies.push(new WeaponEnemy(this));
-    }
+    this.enemies.push(new Enemy(this));
   }
 
   // collision detection between two circle
@@ -185,7 +201,6 @@ export default class Game {
     } else {
       this.bonuses.push(new RocketBonus(this));
     }
-    // TODO: Rocket weapon bonus
   }
 
   // Bounce object when collision
@@ -193,7 +208,7 @@ export default class Game {
     const object = value;
     const pX = object.x;
     const pY = object.y;
-    // stop player move when collision with wall
+
     switch (object.direction) {
       case "up":
         object.x = pX;

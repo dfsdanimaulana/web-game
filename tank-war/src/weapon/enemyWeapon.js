@@ -19,6 +19,7 @@ class EnemyWeapon extends Weapon {
     this.fps = 5;
     this.timer = 0;
     this.timerInterval = 1000 / this.fps;
+        // TODO: set different damage for different weapon
   }
 
   draw(ctx) {

@@ -22,7 +22,7 @@ class Walls extends Terrains {
     // Check collision walls - enemy
     this.game.enemies.forEach((enemy) => {
       if (this.game.checkCircleCollision(this, enemy)) {
-         enemy = this.game.bounceObject(enemy)
+        enemy = this.game.bounceObject(enemy);
         enemy.speedX *= -1;
         enemy.speedY *= -1;
       }

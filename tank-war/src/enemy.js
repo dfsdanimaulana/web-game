@@ -2,8 +2,8 @@ import {
   NormalEnemyProjectile,
   MovingEnemyProjectile,
   RocketEnemyProjectile,
-} from "../projectile/enemyProjectile.js";
-import Animation from "../animation.js";
+} from "./projectile/enemyProjectile.js";
+import Animation from "./animation.js";
 
 import {
   EnemyRedWeapon1_1,
@@ -14,18 +14,28 @@ import {
   EnemyRedWeapon2_2,
   EnemyRedWeapon2_3,
   EnemyRedWeapon2_4,
-} from "../weapon/enemyWeaponType.js";
+} from "./weapon/enemyWeaponType.js";
 
 export default class Enemy extends Animation {
   constructor(game) {
     super();
     this.game = game;
+    this.images = [
+      enemyBodyRed,
+      enemyBodyGreen,
+      enemyBodyPurple,
+      enemyBodyDesert,
+    ];
+    this.image = this.images[Math.floor(Math.random() * this.images.length)];
     this.scale = this.game.scale;
     this.spriteWidth = 128;
     this.spriteHeight = 128;
     this.frameX = 0;
     this.frameY = 0;
     this.maxFrame = 1;
+
+    this.lives = Math.floor(Math.random() * 3) + 1;
+    this.maxLives = this.lives;
 
     this.drew = false;
     this.inFrame = false;
@@ -101,8 +111,10 @@ export default class Enemy extends Animation {
     // weapon animation
     this.weapon.update(deltaTime);
 
+    // Update enemy projectile
     this.projectilesPool.forEach((projectile) => projectile.update(this));
 
+    // Random enemy movements
     if (this.directionTimer > this.changeDirectionInterval || !this.drew) {
       const random = Math.random();
       const diff = 1 / 4;
@@ -125,8 +137,9 @@ export default class Enemy extends Animation {
         case "right":
           this.moveRight();
           break;
-        
       }
+      
+      // Shoot enemy projectile
       this.shoot();
       this.directionTimer = 0;
     } else {
@@ -141,10 +154,11 @@ export default class Enemy extends Animation {
       this.speedY *= -1;
     }
 
+    // Create enemy explosion animation
     if (this.lives < 1) {
       this.game.createExplosion(this.x, this.y, this.width);
       this.markedForDeletion = true;
-      this.game.score++;
+      if (!this.game.gameOver) this.game.score++;
     }
 
     // Check collision enemy - enemy
@@ -168,16 +182,12 @@ export default class Enemy extends Animation {
       }
     }
 
-    // Lose condition
-    if (this.game.player.lives < 1) {
-      this.game.gameOver = true;
-    }
-
     this.x += this.speedX * this.maxSpeed;
     this.y += this.speedY * this.maxSpeed;
   }
 
   draw(ctx) {
+    // Draw enemy projectile
     this.projectilesPool.forEach((projectile) => projectile.draw(ctx));
 
     if (!this.drew) {
@@ -199,7 +209,9 @@ export default class Enemy extends Animation {
       this.drew = true;
     } else {
       super.draw(ctx);
+
+      // Draw enemy weapon
+      this.weapon.draw(ctx);
     }
-    this.weapon.draw(ctx);
   }
 }

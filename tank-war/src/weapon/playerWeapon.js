@@ -16,6 +16,7 @@ class PlayerWeapon extends Weapon {
     this.initialDegree = this.degree;
     this.degreeModifier = 0;
     this.parentDegreeModifier = 1;
+    // TODO: set different damage for different weapon 
   }
 
   draw(ctx) {
@@ -65,12 +66,13 @@ export class RocketPlayerWeapon extends PlayerWeapon {
     const pX = this.game.player.x;
     const pY = this.game.player.y;
 
+    if (this.game.enemies.length > 0) {
     // get nearest enemy coordinate
     const enemy = findNearestObject(this.game.enemies, pX, pY);
 
     // calculate angle with nearest enemy
-    const angle = calculateAngle(pX, pY, enemy.x, enemy.y);
-
-    this.degree = angle;
+      const angle = calculateAngle(pX, pY, enemy.x, enemy.y);
+      this.degree = angle;
+    }
   }
 }

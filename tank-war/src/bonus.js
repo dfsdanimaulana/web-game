@@ -68,7 +68,7 @@ export class UpgradeWeaponBonus extends Bonus {
 export class ShieldBonus extends Bonus {
   constructor(game) {
     super(game);
-    this.color = "yellow";
+    this.color = "lightgreen";
   }
   update() {
     super.update();
@@ -82,12 +82,15 @@ export class ShieldBonus extends Bonus {
 export class LiveBonus extends Bonus {
   constructor(game) {
     super(game);
-    this.color = "white";
+    this.color = "blue";
   }
   update() {
     super.update();
     if (this.checkCollision()) {
-      if (this.game.player.lives < this.game.player.maxLives) {
+      if (
+        this.game.player.lives < this.game.player.maxLives &&
+        !this.game.gameOver
+      ) {
         this.game.player.lives++;
       }
       this.remove();
@@ -98,7 +101,7 @@ export class LiveBonus extends Bonus {
 export class RocketBonus extends Bonus {
   constructor(game) {
     super(game);
-    this.color = "blue";
+    this.color = "white";
   }
   update() {
     super.update();
