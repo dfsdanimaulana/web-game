@@ -116,13 +116,9 @@ export default class Enemy extends Animation {
 
     // Random enemy movements
     if (this.directionTimer > this.changeDirectionInterval || !this.drew) {
-      const random = Math.random();
-      const diff = 1 / 4;
+      const directions = ["up", "down", "left", "right"];
 
-      if (random < diff * 1) this.direction = "up";
-      else if (random < diff * 2) this.direction = "left";
-      else if (random < diff * 3) this.direction = "right";
-      else this.direction = "down";
+      this.direction = directions.getRandomValue()
 
       switch (this.direction) {
         case "up":
