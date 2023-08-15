@@ -18,6 +18,11 @@ export default class UI {
     ctx.fillStyle = this.fontColor;
 
     ctx.fillText("Score: " + this.game.score, this.fromX, this.fromY * 1);
+    ctx.fillText(
+      "Best Score: " + this.game.bestScore,
+      this.fromX,
+      this.fromY * 2.5
+    );
 
     if (this.game.bonusTimer > 0) {
       ctx.fillText(
@@ -25,7 +30,7 @@ export default class UI {
           (this.game.bonusInterval * 0.001 -
             (this.game.bonusTimer * 0.001).toFixed()),
         this.fromX,
-        this.fromY * 2.5
+        this.fromY * 4
       );
     }
     if (this.game.bonusExpiredTimer > 0) {
@@ -34,11 +39,11 @@ export default class UI {
           (this.game.bonusExpiredInterval * 0.001 -
             (this.game.bonusExpiredTimer * 0.001).toFixed()),
         this.fromX,
-        this.fromY * 2.5
+        this.fromY * 4
       );
     }
     this.game.input.keys.forEach((key, index) => {
-      ctx.fillText(key, this.fromX, this.fromY * 4 + 20 * index);
+      ctx.fillText(key, this.fromX, this.fromY * 5.5 + 20 * index);
     });
 
     if (this.game.gameOver) {

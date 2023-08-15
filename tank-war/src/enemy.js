@@ -4,6 +4,8 @@ import {
   RocketEnemyProjectile,
 } from "./projectile/enemyProjectile.js";
 import Animation from "./animation.js";
+import { getRandomNumber } from "./utils.js";
+import "./prototype.js";
 
 import {
   EnemyRedWeapon1_1,
@@ -26,7 +28,7 @@ export default class Enemy extends Animation {
       enemyBodyPurple,
       enemyBodyDesert,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue();
     this.scale = this.game.scale;
     this.spriteWidth = 128;
     this.spriteHeight = 128;
@@ -34,7 +36,7 @@ export default class Enemy extends Animation {
     this.frameY = 0;
     this.maxFrame = 1;
 
-    this.lives = Math.floor(Math.random() * 3) + 1;
+    this.lives = getRandomNumber(2, 4);
     this.maxLives = this.lives;
 
     this.drew = false;
@@ -67,16 +69,14 @@ export default class Enemy extends Animation {
       new EnemyRedWeapon2_3(this),
       new EnemyRedWeapon2_4(this),
     ];
-    this.weaponLevel = Math.floor(Math.random() * this.weapons.length);
-    this.maxWeaponLevel = this.weapons.length;
-    this.weapon = this.weapons[this.weaponLevel];
+    this.weapon = this.weapons.getRandomValue();
 
     this.projectilesPool = [];
     this.numberOfProjectiles = 1;
     this.createProjectiles();
 
     this.directionTimer = 0;
-    this.changeDirectionInterval = Math.random() * 2000 + 2000;
+    this.changeDirectionInterval = getRandomNumber(1000, 4000);
   }
   // create projectile object poll
   createProjectiles() {
@@ -138,7 +138,7 @@ export default class Enemy extends Animation {
           this.moveRight();
           break;
       }
-      
+
       // Shoot enemy projectile
       this.shoot();
       this.directionTimer = 0;
@@ -165,8 +165,7 @@ export default class Enemy extends Animation {
     this.game.enemies.forEach((enemy) => {
       if (this.x !== enemy.x && this.y !== enemy.y) {
         if (this.game.checkCircleCollision(this, enemy)) {
-          this.speedX *= -1;
-          this.speedY *= -1;
+          this.game.resolveCollision(this, enemy);
         }
       }
     });

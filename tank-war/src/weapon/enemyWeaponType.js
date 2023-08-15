@@ -1,4 +1,5 @@
 import { NormalWeapon, MovingWeapon, RocketWeapon } from "./enemyWeapon.js";
+import "../prototype.js";
 
 export class EnemyRedWeapon1_1 extends NormalWeapon {
   constructor(enemy) {
@@ -9,7 +10,7 @@ export class EnemyRedWeapon1_1 extends NormalWeapon {
       enemyWeaponGreen1_1,
       enemyWeaponDesert1_1,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue();
   }
 }
 export class EnemyRedWeapon1_2 extends NormalWeapon {
@@ -21,7 +22,7 @@ export class EnemyRedWeapon1_2 extends NormalWeapon {
       enemyWeaponGreen1_2,
       enemyWeaponDesert1_2,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue()
   }
 }
 export class EnemyRedWeapon1_3 extends NormalWeapon {
@@ -33,10 +34,10 @@ export class EnemyRedWeapon1_3 extends NormalWeapon {
       enemyWeaponGreen1_3,
       enemyWeaponDesert1_3,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue()
   }
 }
-export class EnemyRedWeapon1_4 extends MovingWeapon {
+export class EnemyRedWeapon1_4 extends NormalWeapon {
   constructor(enemy) {
     super(enemy);
     this.images = [
@@ -45,7 +46,7 @@ export class EnemyRedWeapon1_4 extends MovingWeapon {
       enemyWeaponGreen1_4,
       enemyWeaponDesert1_4,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue()
   }
 }
 export class EnemyRedWeapon2_1 extends MovingWeapon {
@@ -57,7 +58,7 @@ export class EnemyRedWeapon2_1 extends MovingWeapon {
       enemyWeaponGreen2_1,
       enemyWeaponDesert2_1,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue()
     this.maxFrame = 10;
   }
 }
@@ -70,7 +71,7 @@ export class EnemyRedWeapon2_2 extends MovingWeapon {
       enemyWeaponGreen2_2,
       enemyWeaponDesert2_2,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue();
     this.maxFrame = 10;
   }
 }
@@ -83,7 +84,7 @@ export class EnemyRedWeapon2_3 extends MovingWeapon {
       enemyWeaponGreen2_3,
       enemyWeaponDesert2_3,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue();
 
     this.maxFrame = 10;
   }
@@ -97,7 +98,7 @@ export class EnemyRedWeapon2_4 extends MovingWeapon {
       enemyWeaponGreen2_4,
       enemyWeaponDesert2_4,
     ];
-    this.image = this.images[Math.floor(Math.random() * this.images.length)];
+    this.image = this.images.getRandomValue();
 
     this.maxFrame = 10;
   }

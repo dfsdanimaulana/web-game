@@ -54,8 +54,25 @@ export function drawCircle(context, x, y, size, radiusModifier = 1) {
 }
 
 export function drawLine(x1, y1, x2, y2) {
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-      }
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+}
+
+export function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function checkLocalStorage(name, initialValue = "0") {
+  if (!localStorage.getItem(name)) {
+    localStorage.setItem(name, initialValue.toString());
+  }
+}
+
+export function updateLocalStorage(name, newValue) {
+  const currentValue = parseInt(localStorage.getItem(name));
+  if (newValue > currentValue) {
+    localStorage.setItem(name, newValue.toString());
+  }
+}

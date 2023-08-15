@@ -4,6 +4,7 @@ import {
   UpgradeWeaponBonus,
   RocketBonus,
 } from "./src/bonus.js";
+import { checkLocalStorage, updateLocalStorage } from "./src/utils.js";
 import Enemy from "./src/enemy.js";
 import InputHandler from "./src/input.js";
 import Collision from "./src/collision.js";
@@ -14,6 +15,7 @@ import GrassLight2 from "./src/terrains/type/grassLight2.js";
 import GrassDark from "./src/terrains/type/grassDark.js";
 import GrassDark2 from "./src/terrains/type/grassDark2.js";
 import UI from "./src/UI.js";
+import "./src/prototype.js";
 
 export default class Game {
   constructor(width, height) {
@@ -32,8 +34,7 @@ export default class Game {
       new GrassDark2(this),
     ];
 
-    this.terrains =
-      this.terrainsType[Math.floor(Math.random() * this.terrainsType.length)];
+    this.terrains = this.terrainsType.getRandomValue();
 
     this.enemies = [];
     this.maxEnemies = 3; // max enemies for first wave
@@ -41,9 +42,17 @@ export default class Game {
     this.collisions = [];
 
     this.score = 0;
-    // TODO: add best score and store in local storage 
+    this.bestScore = 0;
+    this.checkBestScore();
+
     this.gameOver = false;
 
+    this.bonusType = [
+      new LiveBonus(this),
+      new ShieldBonus(this),
+      new UpgradeWeaponBonus(this),
+      new RocketBonus(this),
+    ];
     this.bonuses = [];
     this.bonusTimer = 0;
     this.bonusExpiredTimer = 0;
@@ -57,11 +66,11 @@ export default class Game {
     this.gameOver = false;
     this.maxEnemies = 3;
     this.enemies = [];
+    this.bonuses = [];
     this.score = 0;
     this.bonusTimer = 0;
     this.bonusExpiredTimer = 0;
-    this.terrains =
-      this.terrainsType[Math.floor(Math.random() * this.terrainsType.length)];
+    this.terrains = this.terrainsType.getRandomValue();
     this.player.restart();
   }
 
@@ -84,6 +93,10 @@ export default class Game {
     if (this.player.lives < 1) {
       this.gameOver = true;
     }
+
+    // Update best score
+    updateLocalStorage("tankBestScore", this.score);
+    this.bestScore = localStorage.getItem("tankBestScore");
 
     // Bonus interval timer
     if (this.bonuses.length < 1 && !this.gameOver) {
@@ -160,6 +173,11 @@ export default class Game {
     this.enemies.push(new Enemy(this));
   }
 
+  // check best score if exists if not create one with value 0
+  checkBestScore() {
+    checkLocalStorage("tankBestScore", "0");
+  }
+
   // collision detection between two circle
   checkCircleCollision(a, b) {
     // Calculate the center coordinates of the a
@@ -188,19 +206,28 @@ export default class Game {
     );
   }
 
+  // resolve collision betwen two moving objects
+  resolveCollision(obj1, obj2) {
+    const dx = obj1.x + obj1.width / 2 - (obj2.x + obj2.width / 2);
+    const dy = obj1.y + obj1.height / 2 - (obj2.y + obj2.height / 2);
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    const angle = Math.atan2(dy, dx);
+    const totalSpeed = Math.sqrt(
+      obj1.speedX * obj1.speedX + obj1.speedY * obj1.speedY
+    );
+
+    const newSpeedX1 = totalSpeed * Math.cos(angle);
+    const newSpeedY1 = totalSpeed * Math.sin(angle);
+
+    obj1.speedX = newSpeedX1;
+    obj1.speedY = newSpeedY1;
+  }
+
   // Create new bonus
   createBonus() {
-    const randomNumber = Math.random();
-    const diff = 1 / 4;
-    if (randomNumber < diff * 1) {
-      this.bonuses.push(new LiveBonus(this));
-    } else if (randomNumber < diff * 2) {
-      this.bonuses.push(new ShieldBonus(this));
-    } else if (randomNumber < diff * 3) {
-      this.bonuses.push(new UpgradeWeaponBonus(this));
-    } else {
-      this.bonuses.push(new RocketBonus(this));
-    }
+    const randomBonus = this.bonusType.getRandomValue();
+    this.bonuses.push(randomBonus);
   }
 
   // Bounce object when collision
@@ -228,5 +255,17 @@ export default class Game {
         break;
     }
     return object;
+  }
+  
+  updateAndDraw(target) {
+    if (Array.isArray(target)) {
+      target.forEach((element) => {
+        element.update(this.deltaTime);
+        element.draw(this.ctx);
+      });
+    } else if (typeof target === "object") {
+      target.update(this.deltaTime);
+      target.draw(this.ctx);
+    }
   }
 }
