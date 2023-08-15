@@ -12,6 +12,21 @@ class Walls extends Terrains {
     ];
     this.image = this.images[this.type];
   }
+
+  resolveCollisionWithWall(obj) {
+    if (obj.speedX > 0 && obj.x + obj.width > this.x) {
+      obj.speedX = -obj.speedX; // Bounce left
+    } else if (obj.speedX < 0 && obj.x < this.x + this.width) {
+      obj.speedX = -obj.speedX; // Bounce right
+    }
+
+    if (obj.speedY > 0 && obj.y + obj.height > this.y) {
+      obj.speedY = -obj.speedY; // Bounce up
+    } else if (obj.speedY < 0 && obj.y < this.y + this.height) {
+      obj.speedY = -obj.speedY; // Bounce down
+    }
+  }
+
   update(deltaTime) {
     super.update(deltaTime);
     //Check collision walls - player
@@ -22,9 +37,13 @@ class Walls extends Terrains {
     // Check collision walls - enemy
     this.game.enemies.forEach((enemy) => {
       if (this.game.checkCircleCollision(this, enemy)) {
-        enemy = this.game.bounceObject(enemy);
-        enemy.speedX *= -1;
-        enemy.speedY *= -1;
+        // Prevent enemy overlapping with walls when summon
+        if (!enemy.drew) {
+          enemy.x = Math.random() * (this.game.width - enemy.width);
+          enemy.y = Math.random() * (this.game.height - enemy.height);
+        }
+        this.resolveCollisionWithWall(enemy);
+        
       }
     });
 
@@ -37,7 +56,7 @@ class Walls extends Terrains {
       });
     });
 
-    // Check collision walls - projectile
+    // Check collision walls - player projectile
     this.game.player.projectilesPool.forEach((projectile) => {
       if (this.game.checkCollision(this, projectile)) {
         projectile.reset();
