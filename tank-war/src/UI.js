@@ -7,6 +7,7 @@ export default class UI {
     this.fontFamily = "Creepster";
     this.fontColor = "white";
   }
+  
   draw(ctx) {
     ctx.save();
     ctx.shadowOffsetX = 2;

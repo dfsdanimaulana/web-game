@@ -22,6 +22,10 @@ export default class Game {
     this.width = width;
     this.height = height;
     this.scale = 1;
+    this.initialize();
+  }
+
+  initialize() {
     this.player = new Player(this);
     this.input = new InputHandler();
     this.UI = new UI(this);
@@ -34,7 +38,7 @@ export default class Game {
       new GrassDark2(this),
     ];
 
-    this.terrains = this.terrainsType.getRandomValue();
+    this.terrains = this.getRandomTerrain();
 
     this.enemies = [];
     this.maxEnemies = 3; // max enemies for first wave
@@ -42,7 +46,7 @@ export default class Game {
     this.collisions = [];
 
     this.score = 0;
-    this.bestScore = 0;
+    this.bestScore = this.getBestScore();
     this.checkBestScore();
 
     this.gameOver = false;
@@ -62,6 +66,29 @@ export default class Game {
     this.stroke = false;
   }
 
+  update() {
+    this.handleDebugMode();
+    this.handleRestartGame();
+    this.handleLoseCondition();
+    this.updateBestScore();
+    this.summonEnemies();
+    this.cleanupObjects();
+  }
+
+  render(deltaTime, ctx) {
+    this.update();
+
+    this.updateBonuses(deltaTime);
+
+    this.updateAndDraw(this.terrains, deltaTime, ctx);
+    this.updateAndDraw(this.bonuses, deltaTime, ctx);
+    this.updateAndDraw(this.enemies, deltaTime, ctx);
+    this.updateAndDraw(this.collisions, deltaTime, ctx);
+
+    this.updateAndDraw(this.player, deltaTime, ctx);
+    this.updateAndDraw(this.UI, deltaTime, ctx);
+  }
+
   restart() {
     this.gameOver = false;
     this.maxEnemies = 3;
@@ -74,13 +101,21 @@ export default class Game {
     this.player.restart();
   }
 
-  update(deltaTime) {
-    // debug mode
+  getRandomTerrain() {
+    return this.terrainsType.getRandomValue();
+  }
+
+  getBestScore() {
+    return localStorage.getItem("tankBestScore") || "0";
+  }
+
+  handleDebugMode() {
     if (this.input.keys.includes("d")) {
       this.stroke = !this.stroke;
     }
+  }
 
-    // restart game handler
+  handleRestartGame() {
     if (
       (this.input.keys.includes("ArrowDown") ||
         this.input.keys.includes("r")) &&
@@ -88,94 +123,103 @@ export default class Game {
     ) {
       this.restart();
     }
+  }
 
-    // Lose condition
+  handleLoseCondition() {
     if (this.player.lives < 1) {
       this.gameOver = true;
     }
+  }
 
-    // Update best score
+  updateBestScore() {
     updateLocalStorage("tankBestScore", this.score);
-    this.bestScore = localStorage.getItem("tankBestScore");
+    this.bestScore = this.getBestScore();
+  }
 
-    // Bonus interval timer
-    if (this.bonuses.length < 1 && !this.gameOver) {
-      if (this.bonusTimer > this.bonusInterval) {
-        this.createBonus();
-        this.bonusTimer = 0;
-      } else {
-        this.bonusTimer += deltaTime;
-      }
-    }
+  checkBestScore() {
+    checkLocalStorage("tankBestScore", "0");
+  }
 
-    // Bonus expired timer
-    if (this.bonuses.length >= 1) {
-      if (this.bonusExpiredTimer > this.bonusExpiredInterval) {
-        this.bonuses = [];
-        this.bonusExpiredTimer = 0;
-      } else {
-        this.bonusExpiredTimer += deltaTime;
-      }
-    }
-
-    // Summon enemy when enemies array is empty
+  summonEnemies() {
     if (this.enemies.length < 1 && !this.gameOver) {
       for (let i = 0; i < this.maxEnemies; i++) {
         this.addEnemy();
       }
       this.maxEnemies++;
     }
-
-    this.bonuses.forEach((bonus) => {
-      bonus.update(deltaTime);
-    });
-
-    this.terrains.update(deltaTime);
-
-    this.player.update(deltaTime);
-
-    this.enemies.forEach((enemy) => {
-      enemy.update(deltaTime);
-    });
-
-    this.collisions.forEach((collision) => {
-      collision.update(deltaTime);
-    });
-
-    // Delete object when markedForDeletion is true
-    this.collisions = this.collisions.filter(
-      (collision) => !collision.markedForDeletion
-    );
-    this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
-    this.bonuses = this.bonuses.filter((bonus) => !bonus.markedForDeletion);
-  }
-
-  draw(ctx) {
-    this.terrains.draw(ctx);
-    this.player.draw(ctx);
-    this.enemies.forEach((enemy) => {
-      enemy.draw(ctx);
-    });
-    this.bonuses.forEach((bonus) => {
-      bonus.draw(ctx);
-    });
-    this.collisions.forEach((collision) => {
-      collision.draw(ctx);
-    });
-    this.UI.draw(ctx);
-  }
-
-  createExplosion(x, y, size) {
-    this.collisions.push(new Collision(x, y, size));
   }
 
   addEnemy() {
     this.enemies.push(new Enemy(this));
   }
 
-  // check best score if exists if not create one with value 0
-  checkBestScore() {
-    checkLocalStorage("tankBestScore", "0");
+  updateBonuses(deltaTime) {
+    if (this.bonuses.length < 1 && !this.gameOver) {
+      this.bonusExpiredTimer = 0;
+      this.handleBonusInterval(deltaTime);
+    }
+
+    if (this.bonuses.length >= 1) {
+      this.bonusTimer = 0;
+      this.handleBonusExpiredTimer(deltaTime);
+    }
+  }
+
+  handleBonusInterval(deltaTime) {
+    if (this.bonusTimer > this.bonusInterval) {
+      this.createBonus();
+      this.bonusTimer = 0;
+    } else {
+      this.bonusTimer += deltaTime;
+    }
+  }
+
+  createBonus() {
+    const randomBonus = this.bonusType.getRandomValue();
+    this.bonuses.push(randomBonus);
+  }
+
+  handleBonusExpiredTimer(deltaTime) {
+    if (this.bonusExpiredTimer > this.bonusExpiredInterval) {
+      this.bonuses = [];
+      this.bonusExpiredTimer = 0;
+    } else {
+      this.bonusExpiredTimer += deltaTime;
+    }
+  }
+
+  cleanupObjects() {
+    this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
+    this.bonuses = this.bonuses.filter((bonus) => !bonus.markedForDeletion);
+    this.collisions = this.collisions.filter(
+      (collision) => !collision.markedForDeletion
+    );
+  }
+
+  // Define an updated updateAndDraw method for arrays of game elements and single elements
+  updateAndDraw(target, deltaTime, ctx) {
+    if (Array.isArray(target)) {
+      target.forEach((element) => {
+        if (typeof element.update === "function") {
+          element.update(deltaTime);
+        }
+        if (typeof element.draw === "function") {
+          element.draw(ctx);
+        }
+      });
+    } else if (typeof target === "object") {
+      if (typeof target.update === "function") {
+        target.update(deltaTime);
+      }
+      if (typeof target.draw === "function") {
+        target.draw(ctx);
+      }
+    }
+  }
+
+  // Create explosion animation
+  createExplosion(x, y, size) {
+    this.collisions.push(new Collision(x, y, size));
   }
 
   // collision detection between two circle
@@ -224,12 +268,6 @@ export default class Game {
     obj1.speedY = newSpeedY1;
   }
 
-  // Create new bonus
-  createBonus() {
-    const randomBonus = this.bonusType.getRandomValue();
-    this.bonuses.push(randomBonus);
-  }
-
   // Bounce object when collision
   bounceObject(value) {
     const object = value;
@@ -255,17 +293,5 @@ export default class Game {
         break;
     }
     return object;
-  }
-  
-  updateAndDraw(target) {
-    if (Array.isArray(target)) {
-      target.forEach((element) => {
-        element.update(this.deltaTime);
-        element.draw(this.ctx);
-      });
-    } else if (typeof target === "object") {
-      target.update(this.deltaTime);
-      target.draw(this.ctx);
-    }
   }
 }
