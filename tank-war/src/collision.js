@@ -11,8 +11,8 @@ export default class Collision {
     this.frameXInterval = 200;
     this.markedForDeletion = false;
   }
-  update(deltatime) {
-    this.timeSinceLastFrame += deltatime;
+  update(deltaTime) {
+    this.timeSinceLastFrame += deltaTime;
     if (this.timeSinceLastFrame > this.frameXInterval) {
       this.frameX++;
       this.timeSinceLastFrame = 0;

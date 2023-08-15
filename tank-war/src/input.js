@@ -12,54 +12,12 @@ export default class InputHandler {
         this.holdThreshold = 500
 
         window.addEventListener('keydown', (e) => {
-            if (
-                (e.key === 'ArrowLeft' ||
-                    e.key === 'ArrowRight' ||
-                    e.key === 'ArrowUp' ||
-                    e.key === 'ArrowDown' ||
-                    e.key === ' ' ||
-                    e.key === 'Enter' ||
-                    e.key === 'Space') &&
-                this.keys.indexOf(e.key) === -1
-            ) {
-                this.keys.push(e.key)
-            }
+            if (this.keys.indexOf(e.key) === -1) this.keys.push(e.key)
         })
 
         window.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowLeft') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
-
-            if (e.key === 'ArrowRight') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
-
-            if (e.key === 'ArrowUp') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
-
-            if (e.key === 'ArrowDown') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
-
-            if (e.key === 'Space') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
-
-            if (e.key === ' ') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
-            if (e.key === 'Enter') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
-            if (e.key === 'Space') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
-
-            if (e.key === 'd') {
-                this.keys.splice(this.keys.indexOf(e.key), 1)
-            }
+            const index = this.keys.indexOf(e.key)
+            if (index > -1) this.keys.splice(index, 1)
         })
 
         // Touch events for swipe on mobile

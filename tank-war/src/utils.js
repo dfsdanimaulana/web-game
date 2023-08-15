@@ -53,7 +53,7 @@ export function drawCircle(context, x, y, size, radiusModifier = 1) {
   context.restore();
 }
 
-export function drawLine(x1, y1, x2, y2) {
+export function drawLine(ctx, x1, y1, x2, y2) {
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);

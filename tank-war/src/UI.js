@@ -3,7 +3,7 @@ export default class UI {
     this.game = game;
     this.fromX = 10;
     this.fromY = 20;
-    this.fontSize = 20;
+    this.fontSize = 30;
     this.fontFamily = "Creepster";
     this.fontColor = "white";
   }
