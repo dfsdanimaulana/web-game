@@ -1,4 +1,4 @@
-# Tank Battle Game
+# Tank Battle Game by @dnm17_
 
 Welcome to Tank Battle Game! This is a 2D game where you control a tank, survive against waves of enemies, and collect bonuses to boost your performance. Test your skills, strategize, and aim for the highest score!
 
@@ -61,7 +61,7 @@ In this game, you take control of a tank in a 2D environment. Your goal is to su
 - Strive to achieve the highest score by defeating enemies and collecting bonuses.
 
 ## Screenshots
-![Gameplay Screenshot 1](/screenshots/screenshot1.png)
+![Gameplay Screenshot 1](/img/game-preview.jpg)
 *Caption: Engage in intense battles against enemy tanks and navigate through different terrains.*
 
 ![Gameplay Screenshot 2](/screenshots/screenshot2.png)

@@ -4,6 +4,7 @@ class EnemyProjectile extends Projectile {
     constructor(game) {
         super(game)
         this.color = 'red'
+        this.damage = 1;
     }
     update() {
         super.update()
