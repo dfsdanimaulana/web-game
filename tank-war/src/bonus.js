@@ -11,6 +11,8 @@ class Bonus {
     this.angle = 0;
     this.angleSpeed = 0.2;
     this.curve = 0.5;
+
+    this.borderColor = "orange";
   }
   checkCollision() {
     return this.game.checkCollision(this, this.game.player);
@@ -35,7 +37,7 @@ class Bonus {
     }
 
     this.drawBorder(ctx);
-    
+
     ctx.save();
     const centerX = this.x + this.width * 0.5;
     const centerY = this.y + this.height * 0.5;
@@ -76,7 +78,6 @@ export class UpgradeWeaponBonus extends Bonus {
   constructor(game) {
     super(game);
     this.color = "red";
-    this.borderColor = "yellow"
   }
   update() {
     super.update();
@@ -93,7 +94,6 @@ export class ShieldBonus extends Bonus {
   constructor(game) {
     super(game);
     this.color = "yellow";
-    this.borderColor = "orange"
   }
   update() {
     super.update();
@@ -108,7 +108,6 @@ export class LiveBonus extends Bonus {
   constructor(game) {
     super(game);
     this.color = "blue";
-    this.borderColor = "red"
   }
   update() {
     super.update();
@@ -128,7 +127,6 @@ export class RocketBonus extends Bonus {
   constructor(game) {
     super(game);
     this.color = "white";
-    this.borderColor = "yellow"
   }
   update() {
     super.update();
