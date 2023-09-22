@@ -12,12 +12,12 @@ export default class UI {
     // Set the square properties
     const x = 2; // X-coordinate of the top-left corner
     const y = 2; // Y-coordinate of the top-left corner
-    const sideLengthX = 260; // Width
+    const sideLengthX = 245; // Width
     const sideLengthY = 220; // Height
     const borderRadius = 10; // Border radius
     const borderColor = 'black'; // Border color
     const borderWidth = 2; // Border width
-    const fillColor = 'rgba(0, 0, 0, 0.3)'; // Transparent black fill color
+    const fillColor = 'rgba(0, 0, 0, 0.2)'; // Transparent black fill color
 
     // Draw the square
     ctx.save();
@@ -100,13 +100,13 @@ export default class UI {
     if (this.game.gameOver) {
       ctx.save();
       ctx.textAlign = "center";
-      ctx.font = "100px " + this.fontFamily;
+      ctx.font = "150px " + this.fontFamily;
       ctx.fillText("GAME OVER", this.game.width * 0.5, this.game.height * 0.5);
-      ctx.font = "20px Impact";
+      ctx.font = "30px Impact";
       ctx.fillText(
-        "press R/SwipeDown to restart",
+        "press R or SwipeDown to restart",
         this.game.width * 0.5,
-        this.game.height * 0.5 + 30
+        this.game.height * 0.5 + 35
       );
       ctx.restore();
     }
