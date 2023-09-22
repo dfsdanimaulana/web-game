@@ -7,8 +7,45 @@ export default class UI {
     this.fontFamily = "Creepster";
     this.fontColor = "white";
   }
+
+  drawSquare(ctx) {
+    // Set the square properties
+    const x = 2; // X-coordinate of the top-left corner
+    const y = 2; // Y-coordinate of the top-left corner
+    const sideLengthX = 260; // Width
+    const sideLengthY = 220; // Height
+    const borderRadius = 10; // Border radius
+    const borderColor = 'black'; // Border color
+    const borderWidth = 2; // Border width
+    const fillColor = 'rgba(0, 0, 0, 0.3)'; // Transparent black fill color
+
+    // Draw the square
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x + borderRadius, y);
+    ctx.lineTo(x + sideLengthX - borderRadius, y);
+    ctx.arcTo(x + sideLengthX, y, x + sideLengthX, y + borderRadius, borderRadius);
+    ctx.lineTo(x + sideLengthX, y + sideLengthY - borderRadius);
+    ctx.arcTo(x + sideLengthX, y + sideLengthY, x + sideLengthX - borderRadius, y + sideLengthY, borderRadius);
+    ctx.lineTo(x + borderRadius, y + sideLengthY);
+    ctx.arcTo(x, y + sideLengthY, x, y + sideLengthY - borderRadius, borderRadius);
+    ctx.lineTo(x, y + borderRadius);
+    ctx.arcTo(x, y, x + borderRadius, y, borderRadius);
+    ctx.closePath();
+
+    ctx.lineWidth = borderWidth;
+    ctx.strokeStyle = borderColor;
+    ctx.fillStyle = fillColor;
+
+    ctx.stroke();
+    ctx.fill();
+    ctx.restore();
+  }
   
   draw(ctx) {
+
+    this.drawSquare(ctx)
+
     ctx.save();
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
@@ -55,14 +92,15 @@ export default class UI {
 
     // Pressed keys
     this.game.input.keys.forEach((key, index) => {
-      ctx.fillText(key, this.fromX, this.fromY * 7 + 20 * index);
+      if(key === ' ') key = 'Space';
+      ctx.fillText(key, this.fromX, this.fromY * 7 + 25 * index);
     });
 
     // Game over
     if (this.game.gameOver) {
       ctx.save();
       ctx.textAlign = "center";
-      ctx.font = "100px Impact";
+      ctx.font = "100px " + this.fontFamily;
       ctx.fillText("GAME OVER", this.game.width * 0.5, this.game.height * 0.5);
       ctx.font = "20px Impact";
       ctx.fillText(
