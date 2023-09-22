@@ -33,6 +33,9 @@ class Bonus {
       }
       this.drew = true;
     }
+
+    this.drawBorder(ctx);
+    
     ctx.save();
     const centerX = this.x + this.width * 0.5;
     const centerY = this.y + this.height * 0.5;
@@ -47,12 +50,33 @@ class Bonus {
     ctx.restore();
     ctx.restore();
   }
+
+  drawBorder(ctx) {
+    // Set the circle properties
+    const centerX = this.x + this.width * 0.5; // X-coordinate of the center
+    const centerY = this.y + this.height * 0.5; // Y-coordinate of the center
+    const radius = this.width * 0.8; // Radius of the circle
+    const borderColor = this.borderColor; // Border color
+    const borderWidth = 2; // Border width
+
+    // Draw the circle
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI); // Draw a complete circle
+
+    ctx.lineWidth = borderWidth;
+    ctx.strokeStyle = borderColor;
+
+    ctx.stroke();
+    ctx.restore();
+  }
 }
 
 export class UpgradeWeaponBonus extends Bonus {
   constructor(game) {
     super(game);
     this.color = "red";
+    this.borderColor = "yellow"
   }
   update() {
     super.update();
@@ -68,7 +92,8 @@ export class UpgradeWeaponBonus extends Bonus {
 export class ShieldBonus extends Bonus {
   constructor(game) {
     super(game);
-    this.color = "lightgreen";
+    this.color = "yellow";
+    this.borderColor = "orange"
   }
   update() {
     super.update();
@@ -83,6 +108,7 @@ export class LiveBonus extends Bonus {
   constructor(game) {
     super(game);
     this.color = "blue";
+    this.borderColor = "red"
   }
   update() {
     super.update();
@@ -102,6 +128,7 @@ export class RocketBonus extends Bonus {
   constructor(game) {
     super(game);
     this.color = "white";
+    this.borderColor = "yellow"
   }
   update() {
     super.update();
