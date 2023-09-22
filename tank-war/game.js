@@ -49,6 +49,8 @@ export default class Game {
     this.bestScore = this.getBestScore();
     this.checkBestScore();
 
+    this.wave = 0;
+
     this.gameOver = false;
 
     this.bonuses = [];
@@ -89,6 +91,7 @@ export default class Game {
     this.enemies = [];
     this.bonuses = [];
     this.score = 0;
+    this.wave = 0;
     this.bonusTimer = 0;
     this.bonusExpiredTimer = 0;
     this.terrains = this.terrainsType.getRandomValue();
@@ -139,7 +142,8 @@ export default class Game {
       for (let i = 0; i < this.maxEnemies; i++) {
         this.addEnemy();
       }
-      this.maxEnemies++;
+      this.wave += 1;
+      this.maxEnemies += 1;
     }
   }
 

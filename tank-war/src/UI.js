@@ -2,7 +2,7 @@ export default class UI {
   constructor(game) {
     this.game = game;
     this.fromX = 10;
-    this.fromY = 20;
+    this.fromY = 30;
     this.fontSize = 30;
     this.fontFamily = "Creepster";
     this.fontColor = "white";
@@ -18,35 +18,47 @@ export default class UI {
     ctx.textAlign = "left";
     ctx.fillStyle = this.fontColor;
 
+    // Score
     ctx.fillText("Score: " + this.game.score, this.fromX, this.fromY * 1);
+
+    // Best score
     ctx.fillText(
       "Best Score: " + this.game.bestScore,
       this.fromX,
       this.fromY * 2.5
     );
 
+    // Wave count
+    ctx.fillText("Wave: " + this.game.wave, this.fromX, this.fromY * 4);
+
+    // Bonus
     if (this.game.bonusTimer > 0) {
       ctx.fillText(
         "Next Bonus In: " +
           (this.game.bonusInterval * 0.001 -
             (this.game.bonusTimer * 0.001).toFixed()),
         this.fromX,
-        this.fromY * 4
+        this.fromY * 5.5
       );
     }
+
+    // Bonus expired
     if (this.game.bonusExpiredTimer > 0) {
       ctx.fillText(
         "Bonus Expired In: " +
           (this.game.bonusExpiredInterval * 0.001 -
             (this.game.bonusExpiredTimer * 0.001).toFixed()),
         this.fromX,
-        this.fromY * 4
+        this.fromY * 5.5
       );
     }
+
+    // Pressed keys
     this.game.input.keys.forEach((key, index) => {
-      ctx.fillText(key, this.fromX, this.fromY * 5.5 + 20 * index);
+      ctx.fillText(key, this.fromX, this.fromY * 7 + 20 * index);
     });
 
+    // Game over
     if (this.game.gameOver) {
       ctx.save();
       ctx.textAlign = "center";
